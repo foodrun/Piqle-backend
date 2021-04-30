@@ -1,0 +1,1 @@
+To run the application in development/local environment  - `docker-compose up`
