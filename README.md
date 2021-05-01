@@ -12,4 +12,4 @@ Test Route
 `GET http://localhost/api/v1/test-route/test`
 
 Generate OTP for table activation
-`PUT http://localhost/api/v1/table-management/table/otp`
+`POST http://localhost/api/v1/table-management/table/otp`
