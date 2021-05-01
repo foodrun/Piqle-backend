@@ -10,11 +10,15 @@ import bodyParser from 'body-parser';
 import IndexRoute from './routes/index.route';
 import errorMiddleware from './middlewares/error.middleware';
 import { stream } from './utils/logger';
+
 import { config } from './config/app.config';
+import { initializeAdmin } from './database';
 
 export const app = express();
 
 const env = config.application.environment;
+
+initializeAdmin();
 
 if (env === 'production') {
   app.use(morgan('combined', { stream }));
