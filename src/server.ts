@@ -36,5 +36,5 @@ app.use('/api', IndexRoute);
 app.use(errorMiddleware);
 
 app.listen(config.application.PORT, () => {
-  console.log('Express Server is running on Port ' + config.application.PORT);
+  console.log('Server is running - Refer to docs to understand connection details');
 });

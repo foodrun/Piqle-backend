@@ -3,7 +3,7 @@ import { config } from '../config/app.config';
 
 export const dbConfig = () => {
   admin.initializeApp({
-    credential: admin.credential.cert(config.DB),
+    credential: admin.credential.cert(config.DB as admin.ServiceAccount),
     databaseURL: config.DB_URL,
   });
   const db = admin.firestore();

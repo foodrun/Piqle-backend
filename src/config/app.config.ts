@@ -15,8 +15,6 @@ const {
   FIRESTORE_DB_URL,
 } = process.env;
 
-console.log(PRIVATE_KEY.replace(/\\n/g, '\n'));
-
 export const config = {
   application: {
     PORT: PORT,
