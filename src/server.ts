@@ -1,6 +1,8 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import { Request, Response } from 'express';
+
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
