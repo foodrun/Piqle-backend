@@ -5,7 +5,7 @@ class TableController {
   public generateTableOTP = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { restaurantID, tableID } = req.body;
-      const tableResult = await tableService.startUserSession(restaurantID, parseInt(tableID));
+      const tableResult = await tableService.startUserSession(restaurantID, tableID);
       res.status(201).json(tableResult);
     } catch (error) {
       console.log(error);
