@@ -7,4 +7,4 @@ WORKDIR /app
 RUN npm install
 RUN npm run build
 
-CMD ["node", "build/server.ts"]
+CMD ["node", "build/server.js"]
