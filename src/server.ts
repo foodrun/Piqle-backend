@@ -35,6 +35,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Routes go here
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).send();
+});
+
 app.use('/api', IndexRoute);
 
 app.use(errorMiddleware);
