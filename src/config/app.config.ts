@@ -12,6 +12,7 @@ const {
   FIRESTORE_TOKEN_URI,
   FIRESTORE_AUTH_PROVIDER_CERT_URL,
   FIRESTORE_CLIENT_CERT_URL,
+  FIRESTORE_DB_URL,
 } = process.env;
 
 console.log(PRIVATE_KEY.replace(/\\n/g, '\n'));
@@ -33,4 +34,5 @@ export const config = {
     auth_provider_x509_cert_url: FIRESTORE_AUTH_PROVIDER_CERT_URL,
     client_x509_cert_url: FIRESTORE_CLIENT_CERT_URL,
   },
+  DB_URL: FIRESTORE_DB_URL,
 };
