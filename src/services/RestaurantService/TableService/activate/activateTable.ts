@@ -7,16 +7,16 @@ import { updateTableDocument } from '../../../../helper/updateTableDocument';
 
 interface ITableStatus<T> {
   isActive: boolean;
-  tableInformation: T[];
+  tableInformation: T;
 }
 
 class ActivateTableService {
-  async initialteTableActivation(restaurantID: string, tableID: string): Promise<unknown> {
+  async initialteTableActivation(restaurantID: string, tableID: string): Promise<any> {
     const activateResult = await this.updateUniqueCodeInRestaurantTableCollection(restaurantID, tableID, otpService.generateUniqueCode());
     return activateResult;
   }
 
-  private async checkIfTableExistsAndActive(restaurantID: string, tableID: string, getTableInformation = false): Promise<ITableStatus<unknown>> {
+  private async checkIfTableExistsAndActive(restaurantID: string, tableID: string, getTableInformation = false): Promise<ITableStatus<any>> {
     const result = await dbConfig().collection(RESTAURANTS).doc(restaurantID).collection(TABLES).get();
     const tables = result.docs.map(docs => {
       return docs.data();
@@ -31,7 +31,7 @@ class ActivateTableService {
     const isActive = isTableOTPGreaterThanZero(tableOTP);
 
     if (getTableInformation) {
-      return { isActive: isActive, tableInformation: (findRequestedTable as unknown) as ITableStatus<ITable> };
+      return { isActive: isActive, tableInformation: (findRequestedTable as unknown) as ITableStatus<ITable[]> };
     }
 
     if (!getTableInformation) {
