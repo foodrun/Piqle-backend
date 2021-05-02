@@ -38,6 +38,7 @@ app.use(cookieParser());
 
 //Routes go here
 app.get('/health', (req: Request, res: Response) => {
+  console.log('Health Route Hit');
   res.status(200).send();
 });
 
@@ -45,6 +46,10 @@ app.use('/api', IndexRoute);
 
 app.use(errorMiddleware);
 
-app.listen(config.application.PORT, () => {
-  console.log('Server is running - Refer to docs to understand connection details');
-});
+app
+  .listen(config.application.PORT, () => {
+    console.log('Server is running - Refer to docs to understand connection details');
+  })
+  .on('error', function (err) {
+    console.log(err);
+  });

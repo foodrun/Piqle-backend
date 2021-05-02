@@ -2,3 +2,4 @@ export const MIN_OTP_VALUE = 1000;
 export const MAX_OTP_VALUE = 9999;
 export const RESTAURANTS = 'restaurants';
 export const TABLES = 'tables';
+export const NOT_REQUESTED = 'Table information not requested';

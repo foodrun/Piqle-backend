@@ -12,6 +12,17 @@ class TableController {
       next(error);
     }
   };
+
+  public verifyTableOTP = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { restaurantID, tableID, otp } = req.body;
+      const tableResult = await tableService.verifyUserSessionOTP(restaurantID, tableID, parseInt(otp));
+      res.status(201).json(tableResult);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
 }
 
 export const tableController = new TableController();
