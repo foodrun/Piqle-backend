@@ -42,13 +42,7 @@ class ActivateTableService {
   private async updateUniqueCodeInRestaurantTableCollection(restaurantID: string, tableID: string, uniquelyGeneratedCode: number) {
     const status = await this.checkIfTableExistsAndActive(restaurantID, tableID, false);
     if (status.isActive) throw new HttpException(403, 'Action Forbidden - Table Active');
-    const result = await dbConfig()
-      .collection(RESTAURANTS)
-      .doc(restaurantID)
-      .collection(TABLES)
-      .doc(tableID)
-      .update({ 'table.tableOTP': uniquelyGeneratedCode });
-    return result;
+    await updateTableDocument(restaurantID, tableID, 'table.tableOTP', uniquelyGeneratedCode);
   }
 
   public async OTPCompareWithDB(restaurantID: string, tableID: string, otp: number) {
