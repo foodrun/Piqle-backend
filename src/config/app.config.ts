@@ -13,6 +13,7 @@ const {
   FIRESTORE_AUTH_PROVIDER_CERT_URL,
   FIRESTORE_CLIENT_CERT_URL,
   FIRESTORE_DB_URL,
+  SENTRY_URL,
 } = process.env;
 
 export const config = {
@@ -33,4 +34,7 @@ export const config = {
     client_x509_cert_url: FIRESTORE_CLIENT_CERT_URL,
   },
   DB_URL: FIRESTORE_DB_URL,
+  LOGGING: {
+    sentry_url: SENTRY_URL,
+  },
 };

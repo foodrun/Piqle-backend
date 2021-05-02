@@ -8,6 +8,8 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import compression from 'compression';
 import bodyParser from 'body-parser';
+import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
 
 import IndexRoute from './routes/index.route';
 import errorMiddleware from './middlewares/error.middleware';
@@ -17,6 +19,19 @@ import { config } from './config/app.config';
 import { initializeAdmin } from './database';
 
 export const app = express();
+
+Sentry.init({
+  dsn: config.LOGGING.sentry_url,
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Tracing.Integrations.Express({ app }),
+  ],
+  tracesSampleRate: 1.0,
+});
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
 
 const env = config.application.environment;
 
@@ -43,6 +58,8 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 app.use('/api', IndexRoute);
+
+app.use(Sentry.Handlers.errorHandler());
 
 app.use(errorMiddleware);
 
