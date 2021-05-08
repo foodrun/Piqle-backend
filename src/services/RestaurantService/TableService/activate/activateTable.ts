@@ -23,8 +23,11 @@ class ActivateTableService {
     });
 
     const findRequestedTable = tables.filter((table: ITables) => {
-      return table.table.table_key === tableID;
+      return table.table.tableKey === tableID;
     });
+
+    console.debug(findRequestedTable);
+
     if (findRequestedTable.length < 1) throw new HttpException(400, 'Table Not Found');
 
     const tableOTP = findRequestedTable[0].table.tableOTP;
