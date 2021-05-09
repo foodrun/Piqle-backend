@@ -1,64 +1,66 @@
 import { dbConfig } from '../../../../database';
 import HttpException from '../../../../exceptions/HttpException';
-import { otpService } from '../../../otp.service';
-import { ITable, ITables } from '../../../../interfaces/table.interface';
-import { NOT_REQUESTED, RESTAURANTS, TABLES } from '../../../../constants';
+import { RESTAURANTS, TABLES } from '../../../../constants';
 import { updateTableDocument } from '../../../../helper/updateTableDocument';
 
-interface ITableStatus<T> {
-  isActive: boolean;
-  tableInformation: T;
+interface ITable {
+  tableNumber: number;
+  tableOTP: number;
+  tableOccupied: boolean;
+  tableKey: string;
+}
+interface ITables {
+  table: ITable;
 }
 
-class ActivateTableService {
-  async initialteTableActivation(restaurantID: string, tableID: string): Promise<any> {
-    const activateResult = await this.updateUniqueCodeInRestaurantTableCollection(restaurantID, tableID, otpService.generateUniqueCode());
-    return activateResult;
+interface IStatus {
+  success: boolean;
+}
+interface IActivateTableService {
+  activateTable(restaurantID: string, tableID: string, otp: number): Promise<IStatus>;
+  getTableIfExists(restaurantID: string, tableID: string): Promise<ITables | HttpException>;
+  checkIfTableActive(table: ITables): boolean;
+  compareInputOTPWithDbOTP(table: ITables, otp: number): boolean;
+}
+
+class ActivateTableService implements IActivateTableService {
+  async activateTable(restaurantID: string, tableID: string, otp: number): Promise<IStatus> {
+    const tableInformation = <ITables>await this.getTableIfExists(restaurantID, tableID);
+    const isTableActive = this.checkIfTableActive(tableInformation);
+    if (isTableActive) throw new HttpException(400, 'Bad Request - Table Already Active');
+    const doesOTPMatch = this.compareInputOTPWithDbOTP(tableInformation, otp);
+    if (doesOTPMatch) {
+      await updateTableDocument(restaurantID, tableID, 'table.tableOccupied', true);
+      return { success: true };
+    }
+    return { success: false };
   }
 
-  private async checkIfTableExistsAndActive(restaurantID: string, tableID: string, getTableInformation = false): Promise<ITableStatus<any>> {
-    const result = await dbConfig().collection(RESTAURANTS).doc(restaurantID).collection(TABLES).get();
-    const tables = result.docs.map(docs => {
+  async getTableIfExists(restaurantID: string, tableID: string): Promise<ITables | HttpException> {
+    const tables = await dbConfig().collection(RESTAURANTS).doc(restaurantID).collection(TABLES).get();
+    const allRestaurantTableInformation = <ITables[]>tables.docs.map(docs => {
       return docs.data();
     });
+    const tableExistsInformation = allRestaurantTableInformation.some(table => table.table.tableKey === tableID);
+    if (!tableExistsInformation) throw new HttpException(404, 'Table Does Not Exist');
 
-    const findRequestedTable = tables.filter((table: ITables) => {
-      return table.table.tableKey === tableID;
-    });
-
-    console.debug(findRequestedTable);
-
-    if (findRequestedTable.length < 1) throw new HttpException(400, 'Table Not Found');
-
-    const tableOTP = findRequestedTable[0].table.tableOTP;
-    const isActive = isTableOTPGreaterThanZero(tableOTP);
-
-    if (getTableInformation) {
-      return { isActive: isActive, tableInformation: (findRequestedTable as unknown) as ITableStatus<ITable[]> };
-    }
-
-    if (!getTableInformation) {
-      return { isActive: isActive, tableInformation: (NOT_REQUESTED as unknown) as ITableStatus<string> };
-    }
+    const requestedTableInformation = <ITables[]>(
+      allRestaurantTableInformation.filter(table => table.table.tableKey === tableID)
+    );
+    return requestedTableInformation[0];
   }
 
-  private async updateUniqueCodeInRestaurantTableCollection(restaurantID: string, tableID: string, uniquelyGeneratedCode: number) {
-    const status = await this.checkIfTableExistsAndActive(restaurantID, tableID, false);
-    if (status.isActive) throw new HttpException(403, 'Action Forbidden - Table Active');
-    await updateTableDocument(restaurantID, tableID, 'table.tableOTP', uniquelyGeneratedCode);
+  checkIfTableActive(table: ITables): boolean {
+    const tableOccupiedStatus = table.table.tableOccupied;
+    if (tableOccupiedStatus) return true;
+    return false;
   }
 
-  public async OTPCompareWithDB(restaurantID: string, tableID: string, otp: number) {
-    const tableStatusAndInformation = await this.checkIfTableExistsAndActive(restaurantID, tableID, true);
-    const tableOTP = tableStatusAndInformation.tableInformation.some((table: ITables) => table.table.tableOTP === otp);
-    if (tableOTP) await updateTableDocument(restaurantID, tableID, 'table.tableOccupied', true);
-    return { success: tableOTP };
+  compareInputOTPWithDbOTP(table: ITables, otp: number): boolean {
+    const doesMatchStatus = table.table.tableOTP === otp;
+    if (doesMatchStatus) return true;
+    return false;
   }
 }
-
-const isTableOTPGreaterThanZero = (otp: number) => {
-  if (otp > 0) return true;
-  return false;
-};
 
 export const activateTableService = new ActivateTableService();
