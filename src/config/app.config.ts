@@ -14,6 +14,10 @@ const {
   FIRESTORE_CLIENT_CERT_URL,
   FIRESTORE_DB_URL,
   SENTRY_URL,
+  REGION,
+  cognitoUserPoolId,
+  tokenUse,
+  tokenExpiration,
 } = process.env;
 
 export const config = {
@@ -36,5 +40,11 @@ export const config = {
   DB_URL: FIRESTORE_DB_URL,
   LOGGING: {
     sentry_url: SENTRY_URL,
+  },
+  AUTH: {
+    region: REGION,
+    cognitoUserPoolId: cognitoUserPoolId,
+    tokenUse: tokenUse,
+    tokenExpiration: tokenExpiration,
   },
 };
