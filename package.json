@@ -16,10 +16,11 @@
   "dependencies": {
     "@sentry/node": "^6.3.5",
     "@sentry/tracing": "^6.3.5",
+    "aws-sdk": "^2.912.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
-    "cognito-express": "^2.0.18",
+    "cognito-express": "^2.0.19",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

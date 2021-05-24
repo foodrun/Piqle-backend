@@ -17,9 +17,11 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction): 
     cognitoExpress.validate(token, (err, response) => {
       if (err) {
         console.log(err, 'err');
+        console.log(err);
         next(new HttpException(401, err));
       } else {
         res.locals.user = response;
+        console.log(response, 'res');
         next();
       }
     });

@@ -18,6 +18,8 @@ const {
   cognitoUserPoolId,
   tokenUse,
   tokenExpiration,
+  ACCESS_TOKEN,
+  SECRET_KEY,
 } = process.env;
 
 export const config = {
@@ -42,6 +44,8 @@ export const config = {
     sentry_url: SENTRY_URL,
   },
   AUTH: {
+    access_key: ACCESS_TOKEN,
+    secret_key: SECRET_KEY,
     region: REGION,
     cognitoUserPoolId: cognitoUserPoolId,
     tokenUse: tokenUse,
