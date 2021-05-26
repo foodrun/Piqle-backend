@@ -37,7 +37,7 @@ workflows:
           family: "food-run-task-definition"
           service-name: "food-run-ecs-service"
           requires:
-            - build_staging_api_server
+            - build_production_api_server
           filters:
             branches:
               only:
