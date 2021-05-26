@@ -7,7 +7,7 @@ class SuperAdminAddNewRestaurantAdminService {
   public async addNewRestaurantAdmin(restaurantAdminUser: IRestaurantAdminDetails): Promise<string> {
     const params = <AdminCreateUserRequest>{
       UserPoolId: config.AUTH.cognitoUserPoolId,
-      Username: restaurantAdminUser.name,
+      Username: restaurantAdminUser.username,
       DesiredDeliveryMediums: ['SMS', 'EMAIL'],
       TemporaryPassword: restaurantAdminUser.password,
       UserAttributes: [

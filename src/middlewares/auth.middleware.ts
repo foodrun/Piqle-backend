@@ -14,14 +14,12 @@ const cognitoExpress = new CognitoExpress({
 const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { token } = req.headers;
   if (token) {
-    cognitoExpress.validate(token, (err, response) => {
+    cognitoExpress.validate(token, (err: string, response: any) => {
       if (err) {
-        console.log(err, 'err');
-        console.log(err);
         next(new HttpException(401, err));
       } else {
+        console.log(response, 'response');
         res.locals.user = response;
-        console.log(response, 'res');
         next();
       }
     });

@@ -1,5 +1,5 @@
 export interface IRestaurantAdminDetails {
-  name: string;
+  username: string;
   email: string;
   phoneNumber: string;
   group: string;
