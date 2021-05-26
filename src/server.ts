@@ -65,7 +65,7 @@ app.use(errorMiddleware);
 
 app
   .listen(config.application.PORT, () => {
-    console.log('Server is running - Refer to docs to understand connection details');
+    console.log('Server is running - Refer to docs to understand connection details : ' + config.application.PORT);
   })
   .on('error', function (err) {
     console.log(err);
