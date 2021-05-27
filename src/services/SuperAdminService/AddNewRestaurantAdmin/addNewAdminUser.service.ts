@@ -1,6 +1,10 @@
-import { AdminCreateUserRequest, AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import {
+  AdminAddUserToGroupRequest,
+  AdminCreateUserRequest,
+  AdminCreateUserResponse,
+} from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { config } from '../../../config/app.config';
-import { AWSCognito } from '../../../constants';
+import { ADMINS, AWSCognito } from '../../../constants';
 import { IRestaurantAdminDetails } from '../../../interfaces/restaurant-admin.interface';
 
 class SuperAdminAddNewRestaurantAdminService {
@@ -17,7 +21,16 @@ class SuperAdminAddNewRestaurantAdminService {
       ],
     };
     const userCreationResponse = <AdminCreateUserResponse>await AWSCognito.adminCreateUser(params).promise();
-    return userCreationResponse.User.UserStatus;
+    if (userCreationResponse.User.UserStatus === 'UNCONFIRMED') {
+      const params = <AdminAddUserToGroupRequest>{
+        GroupName: ADMINS,
+        UserPoolId: config.AUTH.cognitoUserPoolId,
+        Username: restaurantAdminUser.username,
+      };
+
+      const addUserToGroupResponse = await AWSCognito.adminAddUserToGroup(params).promise();
+      if (addUserToGroupResponse) return userCreationResponse.User.UserStatus;
+    }
   }
 }
 
