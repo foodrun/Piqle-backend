@@ -5,6 +5,7 @@ import {
 } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { config } from '../../../config/app.config';
 import { ADMINS, AWSCognito } from '../../../constants';
+import HttpException from '../../../exceptions/HttpException';
 import { IRestaurantAdminDetails } from '../../../interfaces/restaurant-admin.interface';
 
 class SuperAdminAddNewRestaurantAdminService {
@@ -29,7 +30,11 @@ class SuperAdminAddNewRestaurantAdminService {
       };
 
       const addUserToGroupResponse = await AWSCognito.adminAddUserToGroup(params).promise();
-      if (addUserToGroupResponse) return userCreationResponse.User.UserStatus;
+      if (addUserToGroupResponse) {
+        return userCreationResponse.User.UserStatus;
+      } else {
+        throw new HttpException(500, 'Something went wrong');
+      }
     }
   }
 }
