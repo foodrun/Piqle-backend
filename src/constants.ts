@@ -7,6 +7,7 @@ export const RESTAURANTS = 'restaurants';
 export const TABLES = 'tables';
 export const NOT_REQUESTED = 'Table information not requested';
 export const FOOD_RUN_ADMIN = 'foodRunAdmins';
+export const ADMINS = 'admins';
 
 export const AWSCognito = new AWS.CognitoIdentityServiceProvider({
   region: 'ap-south-1',
