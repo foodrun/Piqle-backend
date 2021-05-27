@@ -22,7 +22,8 @@ class SuperAdminAddNewRestaurantAdminService {
       ],
     };
     const userCreationResponse = <AdminCreateUserResponse>await AWSCognito.adminCreateUser(params).promise();
-    if (userCreationResponse.User.UserStatus === 'UNCONFIRMED') {
+    console.log(userCreationResponse.User.UserStatus, 'userCreationResponse.User.UserStatus');
+    if (userCreationResponse.User.UserStatus === 'FORCE_CHANGE_PASSWORD') {
       const params = <AdminAddUserToGroupRequest>{
         GroupName: ADMINS,
         UserPoolId: config.AUTH.cognitoUserPoolId,
@@ -30,6 +31,7 @@ class SuperAdminAddNewRestaurantAdminService {
       };
 
       const addUserToGroupResponse = await AWSCognito.adminAddUserToGroup(params).promise();
+      console.log(addUserToGroupResponse);
       if (addUserToGroupResponse) {
         return userCreationResponse.User.UserStatus;
       } else {
