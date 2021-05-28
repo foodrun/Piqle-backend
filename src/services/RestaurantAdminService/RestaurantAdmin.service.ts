@@ -2,7 +2,7 @@ import HttpException from '../../exceptions/HttpException';
 import { IAddUser } from '../../interfaces/User.interface.ts';
 import { AddNewUser } from '../addUser.service';
 
-class SuperAdminService {
+class RestaurantAdminService {
   public async addNewRestaurantAdmin(user: IAddUser): Promise<boolean> {
     if (!user) throw new HttpException(400, 'Invalid Input');
     const userInformation = new AddNewUser(user);
@@ -11,4 +11,4 @@ class SuperAdminService {
   }
 }
 
-export const superAdmin = new SuperAdminService();
+export const restaurantAdminService = new RestaurantAdminService();

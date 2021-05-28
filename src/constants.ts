@@ -8,8 +8,12 @@ export const TABLES = 'tables';
 export const NOT_REQUESTED = 'Table information not requested';
 export const FOOD_RUN_ADMIN = 'foodRunAdmins';
 export const ADMINS = 'admins';
+export const WAITERS = 'waiters';
+export const CHEFS = 'chefs';
+
+export const GROUPS = [ADMINS, WAITERS, CHEFS];
 
 export const AWSCognito = new AWS.CognitoIdentityServiceProvider({
-  region: 'ap-south-1',
+  region: config.AUTH.region,
   credentials: { secretAccessKey: config.AUTH.secret_key, accessKeyId: config.AUTH.access_key },
 });
