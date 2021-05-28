@@ -1,5 +1,5 @@
 import { AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
-import { ADMINS, AWSCognito } from '../constants';
+import { AWSCognito } from '../constants';
 import { UserStatus } from '../enums/userStatus.enum';
 import { AddUserToGroupParamBuilder } from '../helper/addUserToGroupParamBuilder';
 import { CreateNewUserParamBuilder } from '../helper/createNewUserParamBuilder';
@@ -16,13 +16,14 @@ export class AddNewUser {
       ).promise()
     );
     logger.log('info', userCreationResponse);
-    if (userCreationResponse.User.UserStatus === UserStatus.CHANGE_PASSWORD) await this.addNewUserToGroup();
+    if (userCreationResponse.User.UserStatus === UserStatus.CHANGE_PASSWORD)
+      await this.addNewUserToGroup(this.user.group);
     return true;
   }
 
-  public async addNewUserToGroup(): Promise<unknown> {
+  public async addNewUserToGroup(group: string): Promise<unknown> {
     const addUserToGroupResponse = await AWSCognito.adminAddUserToGroup(
-      AddUserToGroupParamBuilder(ADMINS, this.user.username),
+      AddUserToGroupParamBuilder(group, this.user.username),
     ).promise();
 
     return addUserToGroupResponse;
