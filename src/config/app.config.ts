@@ -31,7 +31,7 @@ export const config = {
     type: FIRESTORE_TYPE,
     project_id: FIRESTORE_PROJECT_ID,
     private_key_id: FIRESTORE_PRIVATE_KEY_ID,
-    private_key: PRIVATE_KEY.replace(/\\n/g, '\n'),
+    private_key: PRIVATE_KEY.replace(/\\n/gm, '\n'),
     client_email: FIRESTORE_CLIENT_EMAIL,
     client_id: FIRESTORE_CLIENT_ID,
     auth_uri: FIRESTORE_AUTH_URI,
