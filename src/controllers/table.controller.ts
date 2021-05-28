@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import HttpException from '../exceptions/HttpException';
 import { IStatus, ITableActivateBody } from '../interfaces/common.interface';
 import { tableService } from '../services/RestaurantService/TableService/table.service';
 
