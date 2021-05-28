@@ -39,12 +39,10 @@ export class ActivateTableService implements IActivateTableService {
     memberName: string,
   ): Promise<IStatus> {
     const tableInformation = <ITables>await this.getTableIfExists(restaurantID, tableID);
-    console.log(tableInformation, 'lalalal');
     const isTableActive = this.checkIfTableActive(tableInformation);
     if (isTableActive) throw new HttpException(400, 'Bad Request - Table Already Active');
     const doesOTPMatch = this.compareInputOTPWithDbOTP(tableInformation, otp);
     if (doesOTPMatch) {
-      console.log(this._tableInformation, 'wonderla');
       await updateTableDocument(restaurantID, tableID, 'table.tableOccupied', true);
       const session = new CreateNewTableSession({
         restaurantID,
@@ -70,7 +68,6 @@ export class ActivateTableService implements IActivateTableService {
       allRestaurantTableInformation.filter(table => table.table.tableKey === tableID)
     );
     this.setTableInformation(requestedTableInformation[0]);
-    console.log(this._tableInformation, 'this');
     return this._tableInformation;
   }
 
@@ -98,7 +95,6 @@ class CreateNewTableSession extends ActivateTableService implements ICreateNewTa
 
   async createNewUserSession(tableInformation: ITables): Promise<ICreatedSessionInformation> {
     const { restaurantID, tableID: table_identifier, member_id, member_name } = this.sessionDetails;
-    console.log(tableInformation, 'tableInformation');
     const { tableNumber } = tableInformation.table;
 
     const session = await dbConfig()
