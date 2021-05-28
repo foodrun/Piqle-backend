@@ -3,7 +3,7 @@ import { AWSCognito } from '../constants';
 import { UserStatus } from '../enums/userStatus.enum';
 import { AddUserToGroupParamBuilder } from '../helper/addUserToGroupParamBuilder';
 import { CreateNewUserParamBuilder } from '../helper/createNewUserParamBuilder';
-import { IAddUser } from '../interfaces/User.interface.ts';
+import { IAddUser } from '../interfaces/common.interface';
 import { logger } from '../utils/logger';
 
 export class AddNewUser {
