@@ -1,39 +1,61 @@
 import { dbConfig } from '../../../../database';
 import HttpException from '../../../../exceptions/HttpException';
-import { RESTAURANTS, TABLES } from '../../../../constants';
+import { RESTAURANTS, SESSIONS, TABLES } from '../../../../constants';
 import { updateTableDocument } from '../../../../helper/updateTableDocument';
+import { ITables } from '../../../../interfaces/table.interface';
+import { ISessionDetails, IStatus } from '../../../../interfaces/common.interface';
+import { UserSessionBuilder } from '../../../../helper/userSessionBuilder';
 
-interface ITable {
-  tableNumber: number;
-  tableOTP: number;
-  tableOccupied: boolean;
-  tableKey: string;
-}
-interface ITables {
-  table: ITable;
-}
-
-interface IStatus {
-  success: boolean;
-}
 interface IActivateTableService {
-  activateTable(restaurantID: string, tableID: string, otp: number): Promise<IStatus>;
+  activateTable(
+    restaurantID: string,
+    tableID: string,
+    otp: number,
+    memberID: string,
+    memberName: string,
+  ): Promise<IStatus>;
   getTableIfExists(restaurantID: string, tableID: string): Promise<ITables | HttpException>;
   checkIfTableActive(table: ITables): boolean;
   compareInputOTPWithDbOTP(table: ITables, otp: number): boolean;
+  setTableInformation(table: ITables): void;
 }
 
-class ActivateTableService implements IActivateTableService {
-  async activateTable(restaurantID: string, tableID: string, otp: number): Promise<IStatus> {
+interface ICreatedSessionInformation {
+  sessionID: string;
+}
+
+interface ICreateNewTableSession {
+  createNewUserSession(tableInformation: ITables): Promise<ICreatedSessionInformation>;
+}
+
+export class ActivateTableService implements IActivateTableService {
+  private _tableInformation: ITables;
+
+  async activateTable(
+    restaurantID: string,
+    tableID: string,
+    otp: number,
+    memberID: string,
+    memberName: string,
+  ): Promise<IStatus> {
     const tableInformation = <ITables>await this.getTableIfExists(restaurantID, tableID);
+    console.log(tableInformation, 'lalalal');
     const isTableActive = this.checkIfTableActive(tableInformation);
     if (isTableActive) throw new HttpException(400, 'Bad Request - Table Already Active');
     const doesOTPMatch = this.compareInputOTPWithDbOTP(tableInformation, otp);
     if (doesOTPMatch) {
+      console.log(this._tableInformation, 'wonderla');
       await updateTableDocument(restaurantID, tableID, 'table.tableOccupied', true);
-      return { success: true };
+      const session = new CreateNewTableSession({
+        restaurantID,
+        tableID,
+        member_id: memberID,
+        member_name: memberName,
+      });
+      const tableData = await session.createNewUserSession(this._tableInformation);
+      return { success: true, sessionID: tableData.sessionID };
     }
-    return { success: false };
+    return { success: false, sessionID: null };
   }
 
   async getTableIfExists(restaurantID: string, tableID: string): Promise<ITables | HttpException> {
@@ -47,7 +69,13 @@ class ActivateTableService implements IActivateTableService {
     const requestedTableInformation = <ITables[]>(
       allRestaurantTableInformation.filter(table => table.table.tableKey === tableID)
     );
-    return requestedTableInformation[0];
+    this.setTableInformation(requestedTableInformation[0]);
+    console.log(this._tableInformation, 'this');
+    return this._tableInformation;
+  }
+
+  setTableInformation(table: ITables): void {
+    this._tableInformation = table;
   }
 
   checkIfTableActive(table: ITables): boolean {
@@ -63,4 +91,22 @@ class ActivateTableService implements IActivateTableService {
   }
 }
 
-export const activateTableService = new ActivateTableService();
+class CreateNewTableSession extends ActivateTableService implements ICreateNewTableSession {
+  constructor(private sessionDetails: ISessionDetails) {
+    super();
+  }
+
+  async createNewUserSession(tableInformation: ITables): Promise<ICreatedSessionInformation> {
+    const { restaurantID, tableID: table_identifier, member_id, member_name } = this.sessionDetails;
+    console.log(tableInformation, 'tableInformation');
+    const { tableNumber } = tableInformation.table;
+
+    const session = await dbConfig()
+      .collection(RESTAURANTS)
+      .doc(restaurantID)
+      .collection(SESSIONS)
+      .add(UserSessionBuilder(member_id, member_name, table_identifier, tableNumber));
+
+    return { sessionID: session.id };
+  }
+}

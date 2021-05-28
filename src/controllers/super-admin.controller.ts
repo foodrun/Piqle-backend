@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ADMINS } from '../constants';
 import HttpException from '../exceptions/HttpException';
-import { IAddUser } from '../interfaces/User.interface.ts';
+import { IAddUser } from '../interfaces/common.interface';
 import { superAdmin } from '../services/SuperAdminService/SuperAdmin.service';
 
 class SuperAdminController {

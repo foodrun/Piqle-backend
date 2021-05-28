@@ -1,5 +1,5 @@
 import HttpException from '../../exceptions/HttpException';
-import { IAddUser } from '../../interfaces/User.interface.ts';
+import { IAddUser } from '../../interfaces/common.interface';
 import { AddNewUser } from '../addUser.service';
 
 class SuperAdminService {
