@@ -53,7 +53,6 @@ app.use(cookieParser());
 
 //Routes go here
 app.get('/health', (req: Request, res: Response) => {
-  console.log('Health Route Hit');
   res.status(200).send();
 });
 
