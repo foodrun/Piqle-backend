@@ -10,5 +10,6 @@ export const initializeAdmin = () => {
 
 export const dbConfig = () => {
   const db = admin.firestore();
+  console.log(db, 'dbs');
   return db;
 };
