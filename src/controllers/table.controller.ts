@@ -21,7 +21,6 @@ class TableController {
         res.status(400).send(tableOTPVerificationStatus);
       }
     } catch (_e) {
-      console.log(_e);
       next(_e);
     }
   };
