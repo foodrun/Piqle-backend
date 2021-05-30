@@ -11,7 +11,7 @@
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
     "lint:fix": "npm run lint -- --fix",
-    "push:image": "docker build -t foodrun-node-api . && docker tag foodrun-node-api:latest 451093644216.dkr.ecr.ap-south-1.amazonaws.com/foodrun-node-api:latest && docker push 451093644216.dkr.ecr.ap-south-1.amazonaws.com/foodrun-node-api:latest"
+    "push:image": "docker build -t foodrun-node-api . && docker tag foodrun-node-api:latest 451093644216.dkr.ecr.ap-south-1.amazonaws.com/foodrun-node-api-testing:latest && docker push 451093644216.dkr.ecr.ap-south-1.amazonaws.com/foodrun-node-api-testing:latest"
   },
   "dependencies": {
     "@sentry/node": "^6.3.5",
