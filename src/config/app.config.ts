@@ -1,4 +1,11 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+
+if (process.env.NODE_ENV === 'develop') {
+  dotenv.config({ path: 'config/development/.env' });
+} else {
+  dotenv.config();
+}
+
 const {
   PORT,
   NODE_ENV,

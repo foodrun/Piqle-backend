@@ -6,7 +6,7 @@
   "license": "ISC",
   "scripts": {
     "start": "npm run build && cross-env NODE_ENV=production node build/server.js",
-    "dev": "cross-env NODE_ENV=development nodemon",
+    "dev": "cross-env NODE_ENV=develop nodemon",
     "build": "tsc",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
