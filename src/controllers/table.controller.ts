@@ -4,6 +4,7 @@ import { tableService } from '../services/RestaurantService/TableService/table.s
 
 class TableController {
   public verifyTableOTP = async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.hostname, 'hostname');
     try {
       const { restaurantID, tableID, otp, memberID, memberName } = <ITableActivateBody>req.body;
       const tableOTPVerificationStatus = <IStatus>(
@@ -21,7 +22,6 @@ class TableController {
         res.status(400).send(tableOTPVerificationStatus);
       }
     } catch (_e) {
-      console.log(_e);
       next(_e);
     }
   };
