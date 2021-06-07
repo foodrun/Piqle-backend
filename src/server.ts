@@ -56,11 +56,6 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(JSON.parse(fs.readFileSync('./api-contract.json').toString()), options),
-);
 
 //Routes go here
 app.get('/health', (req: Request, res: Response) => {
@@ -68,6 +63,11 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 app.use('/api', IndexRoute);
+app.use(
+  '/api/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(JSON.parse(fs.readFileSync('./api-contract.json').toString()), options),
+);
 
 app.use(Sentry.Handlers.errorHandler());
 
