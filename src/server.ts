@@ -17,6 +17,8 @@ import { stream } from './utils/logger';
 
 import { config } from './config/app.config';
 import { initializeAdmin } from './database';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
 
 export const app = express();
 
@@ -43,6 +45,10 @@ if (env === 'production') {
   app.use(morgan('dev', { stream }));
 }
 
+const options = {
+  explorer: true,
+};
+
 app.use(cors());
 app.use(hpp());
 app.use(helmet());
@@ -50,6 +56,11 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(JSON.parse(fs.readFileSync('./api-contract.json').toString()), options),
+);
 
 //Routes go here
 app.get('/health', (req: Request, res: Response) => {

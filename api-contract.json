@@ -1,0 +1,190 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Restaurant Management System APIs",
+    "description": "API",
+    "contact": {
+      "email": "cosmo.x@icloud.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/hrishikeshdkakkad/foodRunCreateNewOrder/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "Secured User API calls"
+    }
+  ],
+  "paths": {
+    "/api/v1/order-management/orders/place-order/": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "to place a new order for the user in the particular restaurant from a particular table - that can include multiple user sessions",
+        "description": "Adds a new order to the system",
+        "operationId": "place-order",
+        "requestBody": {
+          "description": "Order to add on a table session in a particular restaurant",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/place-order"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "order created"
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "an existing item already exists"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "place-order": {
+        "required": [
+          "order",
+          "restaurantID",
+          "tableID",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "restaurantID": {
+            "type": "string",
+            "example": "naifqEdhimmq9PX9Rqko"
+          },
+          "tableID": {
+            "type": "string",
+            "example": "RaBXx4Wd1I7Lw3GIYWe7"
+          },
+          "username": {
+            "type": "string",
+            "example": "919845744554"
+          },
+          "order": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/placeorder_order"
+            }
+          }
+        }
+      },
+      "placeorder_customizations": {
+        "type": "object",
+        "properties": {
+          "optionTitle": {
+            "type": "string",
+            "example": "Small (Serves 2-4)"
+          },
+          "optionPrice": {
+            "type": "number",
+            "example": 50
+          }
+        }
+      },
+      "placeorder_items": {
+        "type": "object",
+        "properties": {
+          "indicator": {
+            "type": "string",
+            "example": "veg"
+          },
+          "title": {
+            "type": "string",
+            "example": "Paneer Manchurian"
+          },
+          "price": {
+            "type": "number",
+            "example": 300
+          },
+          "img_url": {
+            "type": "string",
+            "example": "https://5.imimg.com/data5/BR/JP/GLAD-28464664/paneer-manchurian-500x500.png"
+          },
+          "food_id": {
+            "type": "string",
+            "example": "fdc515448a014b1258e3dbdc2a487e87"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          },
+          "customizations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/placeorder_customizations"
+            }
+          }
+        }
+      },
+      "placeorder_details": {
+        "type": "object",
+        "properties": {
+          "category_name": {
+            "type": "string",
+            "example": "starter"
+          },
+          "category_id": {
+            "type": "string",
+            "example": "AF2Vrtz7bZBYrqVoEtuA"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/placeorder_items"
+            }
+          }
+        }
+      },
+      "placeorder_order": {
+        "type": "object",
+        "properties": {
+          "consumable_type": {
+            "type": "string",
+            "example": "food"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/placeorder_details"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
