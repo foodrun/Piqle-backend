@@ -19,8 +19,8 @@ export interface ITableActivateBody {
 export interface IUserSession {
   members: [{ member_id: string; member_name: string }];
   start_timestamp: FirebaseFirestore.Timestamp;
-  end_timestamp: null;
-  orders: [];
+  end_timestamp: FirebaseFirestore.Timestamp;
+  orders: string;
   table_identifier: string;
   table_number: number;
 }

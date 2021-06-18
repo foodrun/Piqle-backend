@@ -10,7 +10,11 @@ export const GAuth = async (req: Request, res: Response, next: NextFunction) => 
     res.locals.gAuth = isAuthValidInformation;
     next();
   } catch (error) {
-    console.log(error);
-    next(new HttpException(401, error));
+    console.log(error.code);
+    if (error.code === 'auth/id-token-expired') {
+      next(new HttpException(401, 'Token Expired'));
+    } else {
+      next(new HttpException(401, error));
+    }
   }
 };

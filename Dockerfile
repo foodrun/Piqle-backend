@@ -1,11 +1,9 @@
-FROM node:16
+FROM node:14
 
 COPY . ./app
 
 WORKDIR /app
 
-RUN npm update --force
 RUN npm install
-RUN npm run build
 
-CMD ["node", "build/server.js"]
+CMD ["npm", "run", "start"]
