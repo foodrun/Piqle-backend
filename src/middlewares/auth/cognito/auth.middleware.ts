@@ -1,8 +1,8 @@
 import { NextFunction, Response, Request } from 'express';
 import CognitoExpress from 'cognito-express';
 
-import HttpException from '../exceptions/HttpException';
-import { config } from '../config/app.config';
+import HttpException from '../../../exceptions/HttpException';
+import { config } from '../../../config/app.config';
 
 const cognitoExpress = new CognitoExpress({
   region: config.AUTH.region,

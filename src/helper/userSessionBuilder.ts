@@ -11,7 +11,7 @@ export const UserSessionBuilder = (
     members: [{ member_id: member_id, member_name: member_name }],
     start_timestamp: admin.firestore.Timestamp.fromDate(new Date()),
     end_timestamp: null,
-    orders: [],
+    orders: null,
     table_identifier,
     table_number: table_number,
   };
