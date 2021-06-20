@@ -1,12 +1,13 @@
 import { dbConfig } from '../../../../database';
 import HttpException from '../../../../exceptions/HttpException';
-import { RESTAURANTS, SESSIONS, TABLES } from '../../../../constants';
+import { RESTAURANTS, SESSIONS } from '../../../../constants';
 import { updateTableDocument } from '../../../../helper/updateTableDocument';
 import { ITables } from '../../../../interfaces/table.interface';
 import { ISessionDetails, IStatus } from '../../../../interfaces/common.interface';
 import { UserSessionBuilder } from '../../../../helper/userSessionBuilder';
 import { tableOperations } from '../TableOperations/table-operations.service';
 import { logger } from '../../../../utils/logger';
+import { SessionOperations } from '../../SessionService/SessionOperations/session-ops.service';
 
 interface IActivateTableService {
   activateTable(
@@ -16,10 +17,8 @@ interface IActivateTableService {
     memberID: string,
     memberName: string,
   ): Promise<IStatus>;
-  getTableIfExists(restaurantID: string, tableID: string): Promise<ITables | HttpException>;
   checkIfTableActive(table: ITables): boolean;
   compareInputOTPWithDbOTP(table: ITables, otp: number): boolean;
-  setTableInformation(table: ITables): void;
 }
 
 interface ICreatedSessionInformation {
@@ -28,6 +27,18 @@ interface ICreatedSessionInformation {
 
 interface ICreateNewTableSession {
   createNewUserSession(tableInformation: ITables): Promise<ICreatedSessionInformation>;
+}
+
+interface IMember {
+  member_id: string;
+  member_name: string;
+}
+interface ISession {
+  members: IMember[];
+  end_timestamp: FirebaseFirestore.Timestamp | null;
+  start_timestamp: FirebaseFirestore.Timestamp | null;
+  table_number: number;
+  orders: null;
 }
 
 export class ActivateTableService implements IActivateTableService {
@@ -40,10 +51,36 @@ export class ActivateTableService implements IActivateTableService {
     memberID: string,
     memberName: string,
   ): Promise<IStatus> {
-    const tableInformation = <ITables>await this.getTableIfExists(restaurantID, tableID);
-    const isTableActive = this.checkIfTableActive(tableInformation);
-    if (isTableActive) throw new HttpException(400, 'Bad Request - Table Already Active');
-    const doesOTPMatch = this.compareInputOTPWithDbOTP(tableInformation, otp);
+    const tableInformation = await tableOperations.getTable(restaurantID, tableID);
+    this._tableInformation = tableInformation;
+    const isTableActive = this.checkIfTableActive(this._tableInformation);
+    if (isTableActive) {
+      //Table Active Workflow - Join session
+      if (!this.compareInputOTPWithDbOTP(this._tableInformation, otp)) {
+        throw new HttpException(400, 'Incorrect OTP');
+      } else {
+        //Check if member ID is in Session
+        if (this._tableInformation.table.currentSession) {
+          const sessionInformation = <ISession>await (await this._tableInformation.table.currentSession.get()).data();
+          const isMemberIDPresent = sessionInformation.members.find(member => member.member_id === memberID);
+          if (!isMemberIDPresent) {
+            const sessionOperations = new SessionOperations(restaurantID, tableID);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const sessionMemberUpdation = await sessionOperations.updateSessionMembers(
+              this._tableInformation.table.currentSession.id,
+              memberID,
+              memberName,
+            );
+          }
+          return { success: true, sessionID: this._tableInformation.table.currentSession.id };
+        } else {
+          throw new HttpException(400, 'Session Expired');
+        }
+
+        return { success: true, sessionID: '1234' };
+      }
+    }
+    const doesOTPMatch = this.compareInputOTPWithDbOTP(this._tableInformation, otp);
     if (doesOTPMatch) {
       await updateTableDocument(restaurantID, tableID, 'table.tableOccupied', true);
       const session = new CreateNewTableSession({
@@ -53,8 +90,7 @@ export class ActivateTableService implements IActivateTableService {
         member_name: memberName,
       });
       const tableData = await session.createNewUserSession(this._tableInformation);
-      //Add this sessionID as a reference in the tables collection
-      const updateCurrentSessionIDInTableDocumentResult = await tableOperations.updateTableContent<string>(
+      const updateCurrentSessionIDInTableDocumentResult = await tableOperations.updateTable<string>(
         restaurantID,
         tableID,
         'table.currentSession',
@@ -65,25 +101,6 @@ export class ActivateTableService implements IActivateTableService {
       return { success: true, sessionID: tableData.sessionID };
     }
     return { success: false, sessionID: null };
-  }
-
-  async getTableIfExists(restaurantID: string, tableID: string): Promise<ITables | HttpException> {
-    const tables = await dbConfig().collection(RESTAURANTS).doc(restaurantID).collection(TABLES).get();
-    const allRestaurantTableInformation = <ITables[]>tables.docs.map(docs => {
-      return docs.data();
-    });
-    const tableExistsInformation = allRestaurantTableInformation.some(table => table.table.tableKey === tableID);
-    if (!tableExistsInformation) throw new HttpException(404, 'Table Does Not Exist');
-
-    const requestedTableInformation = <ITables[]>(
-      allRestaurantTableInformation.filter(table => table.table.tableKey === tableID)
-    );
-    this.setTableInformation(requestedTableInformation[0]);
-    return this._tableInformation;
-  }
-
-  setTableInformation(table: ITables): void {
-    this._tableInformation = table;
   }
 
   checkIfTableActive(table: ITables): boolean {
