@@ -1,5 +1,5 @@
 import HttpException from '../../../exceptions/HttpException';
-import { GetTableDocument } from '../../../helper/OrderHelper/GetTableStatus';
+import { GetTableOccupationStatus } from '../../../helper/OrderHelper/GetTableStatus';
 import { IOrder } from '../../../interfaces/order.interface';
 
 interface IOrderService {
@@ -17,12 +17,12 @@ export class OrderService implements IOrderService {
       // Update current session with the new order
     } else {
       // Create New User Session
-      return { orderID: '1234' };
+      return { orderID: '1239' };
     }
   }
 
   async isTableActive(): Promise<boolean> {
-    const tableStatus = await GetTableDocument(this._orderDetails.restaurantID, this._orderDetails.tableID);
+    const tableStatus = await GetTableOccupationStatus(this._orderDetails.restaurantID, this._orderDetails.tableID);
     return tableStatus;
   }
 }
