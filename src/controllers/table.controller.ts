@@ -13,8 +13,8 @@ class TableController {
           restaurantID,
           tableID,
           parseInt(otp),
-          name,
           user_id,
+          name,
         )
       );
       if (tableOTPVerificationStatus.success === true) {
