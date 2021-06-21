@@ -21,7 +21,8 @@ class OrderOperations implements IOrderClass {
     orderDetails: IOrder,
     userDetails: IUser,
   ): Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>> {
-    const { tableID, sessionID, ...order } = orderDetails;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { tableID, sessionID, restaurantID, ...order } = orderDetails;
     const orderID = await dbConfig()
       .collection(RESTAURANTS)
       .doc(orderDetails.restaurantID)
