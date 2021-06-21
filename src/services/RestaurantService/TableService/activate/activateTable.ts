@@ -76,8 +76,6 @@ export class ActivateTableService implements IActivateTableService {
         } else {
           throw new HttpException(400, 'Session Expired');
         }
-
-        return { success: true, sessionID: '1234' };
       }
     }
     const doesOTPMatch = this.compareInputOTPWithDbOTP(this._tableInformation, otp);
