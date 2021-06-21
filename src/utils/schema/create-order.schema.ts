@@ -1,6 +1,7 @@
 import Joi from 'joi';
 
 export const orderSchema = Joi.object().keys({
+  sessionID: Joi.string().alphanum().min(20).max(20).required(),
   restaurantID: Joi.string().alphanum().min(20).max(20).required(),
   tableID: Joi.string().alphanum().min(20).max(20).required(),
   order: Joi.array()

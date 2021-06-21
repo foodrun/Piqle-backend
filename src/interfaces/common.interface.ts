@@ -32,6 +32,11 @@ export interface ISessionDetails {
   member_name: string;
 }
 
+export interface IUser {
+  memberID: string;
+  memberName: string;
+}
+
 export interface IStatus {
   success: boolean;
   sessionID: string | null;

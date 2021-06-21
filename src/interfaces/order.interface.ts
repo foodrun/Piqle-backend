@@ -21,6 +21,6 @@ interface IFood {
 export interface IOrder {
   restaurantID: string;
   tableID: string;
-  username: string;
+  sessionID: string;
   order: Array<IFood>;
 }

@@ -3,15 +3,31 @@
 //Delete Order
 //Update Order
 
+import { ORDERS, RESTAURANTS } from '../../../../constants';
+import { dbConfig } from '../../../../database';
+import { OrderStatus } from '../../../../enums/orderStatus.enum';
+import { IUser } from '../../../../interfaces/common.interface';
 import { IOrder } from '../../../../interfaces/order.interface';
 
 interface IOrderClass {
-  createNewOrder(orderDetails: IOrder, userSession: string): Promise<{ orderID: string }>;
+  createNewOrder(
+    orderDetails: IOrder,
+    userDetails: IUser,
+  ): Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>>;
 }
 
-export class OrderOperations implements IOrderClass {
-  async createNewOrder(orderDetails: IOrder, customerDetails: string) {
-    console.log(orderDetails, customerDetails);
-    return { orderID: '1234' };
+class OrderOperations implements IOrderClass {
+  async createNewOrder(
+    orderDetails: IOrder,
+    userDetails: IUser,
+  ): Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>> {
+    const orderID = await dbConfig()
+      .collection(RESTAURANTS)
+      .doc(orderDetails.restaurantID)
+      .collection(ORDERS)
+      .add({ orderStatus: OrderStatus.PLACED, ...orderDetails, ...userDetails });
+    return orderID;
   }
 }
+
+export const orderOperations = new OrderOperations();

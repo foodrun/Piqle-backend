@@ -9,7 +9,7 @@ class OrderController {
       const orderInformation = <IOrder>req.body;
       const userInformation = <IGAuth>res.locals.gAuth;
       const order = new OrderService(orderInformation);
-      const orderID = await order.placeOrder();
+      const orderID = await order.placeOrder({ memberID: userInformation.user_id, memberName: userInformation.name });
       res.status(201).send(orderID);
     } catch (_e) {
       next(_e);
