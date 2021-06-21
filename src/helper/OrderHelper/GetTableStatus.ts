@@ -3,7 +3,7 @@ import { dbConfig } from '../../database';
 import HttpException from '../../exceptions/HttpException';
 import { ITables } from '../../interfaces/table.interface';
 
-export const GetTableDocument = async (restaurantID: string, tableID: string): Promise<boolean> => {
+export const GetTableOccupationStatus = async (restaurantID: string, tableID: string): Promise<boolean> => {
   const tableInformation = await dbConfig()
     .collection(RESTAURANTS)
     .doc(restaurantID)

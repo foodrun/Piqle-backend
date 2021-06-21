@@ -7,7 +7,7 @@ const orderRouter = Router();
 
 orderRouter.post(
   '/order-management/create-new-order',
-  GAuth,
+  // GAuth,
   CreateOrderValidator,
   orderController.createNewTableOrder,
 );
