@@ -3,7 +3,7 @@
 //Delete Order
 //Update Order
 
-import { ORDERS, RESTAURANTS } from '../../../../constants';
+import { ORDERS, RESTAURANTS, TABLES } from '../../../../constants';
 import { dbConfig } from '../../../../database';
 import { OrderStatus } from '../../../../enums/orderStatus.enum';
 import { IUser } from '../../../../interfaces/common.interface';
@@ -21,11 +21,17 @@ class OrderOperations implements IOrderClass {
     orderDetails: IOrder,
     userDetails: IUser,
   ): Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>> {
+    const { tableID, ...order } = orderDetails;
     const orderID = await dbConfig()
       .collection(RESTAURANTS)
       .doc(orderDetails.restaurantID)
       .collection(ORDERS)
-      .add({ orderStatus: OrderStatus.PLACED, ...orderDetails, ...userDetails });
+      .add({
+        orderStatus: OrderStatus.PLACED,
+        ...order,
+        ...userDetails,
+        tableID: dbConfig().doc(`/${RESTAURANTS}/${orderDetails.restaurantID}/${TABLES}/${tableID}`),
+      });
     return orderID;
   }
 }
