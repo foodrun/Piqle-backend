@@ -21,7 +21,7 @@ export interface IUserSession {
   start_timestamp: FirebaseFirestore.Timestamp;
   end_timestamp: FirebaseFirestore.Timestamp;
   orders: string;
-  table_identifier: string;
+  table_identifier: FirebaseFirestore.DocumentReference;
   table_number: number;
 }
 

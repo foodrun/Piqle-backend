@@ -127,7 +127,7 @@ class CreateNewTableSession extends ActivateTableService implements ICreateNewTa
       .collection(RESTAURANTS)
       .doc(restaurantID)
       .collection(SESSIONS)
-      .add(UserSessionBuilder(member_id, member_name, table_identifier, tableNumber));
+      .add(UserSessionBuilder(member_id, member_name, table_identifier, tableNumber, restaurantID));
 
     return { sessionID: session.id };
   }
