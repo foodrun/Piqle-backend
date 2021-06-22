@@ -1,8 +1,3 @@
-import { S3 } from 'aws-sdk';
-import axios from 'axios';
-import { AWSS3, BUCKET_NAME } from '../constants';
-import HttpException from '../exceptions/HttpException';
-import fs from 'fs';
 import { tableOperations } from './RestaurantService/TableService/TableOperations/table-operations.service';
 
 export class QRCodeGenerator {
