@@ -1,34 +1,30 @@
+import { S3 } from 'aws-sdk';
 import axios from 'axios';
+import { AWSS3, BUCKET_NAME } from '../constants';
 import HttpException from '../exceptions/HttpException';
+import fs from 'fs';
+import { tableOperations } from './RestaurantService/TableService/TableOperations/table-operations.service';
 
 export class QRCodeGenerator {
   constructor(private _restaurantID: string, private _tableID, private _url: string) {}
 
   public async generateAndUploadTableQR(): Promise<boolean> {
-    const qrBuffer = await this.qrCodeGenerator();
-    if (!qrBuffer) throw new HttpException(500, 'Buffer Missing');
-    const uploadLink = await this.uploadQRToS3(qrBuffer);
-    if (!uploadLink) throw new HttpException(500, 'S3 Upload Failed');
-    const dbLinkUpdateStatus = await this.updateQRLinkInDB(uploadLink);
-    if (!dbLinkUpdateStatus) return false;
+    await tableOperations.getTable(this._restaurantID, this._tableID);
+    const url = this._url;
+    if (!(await this.updateQRLinkInDB(url))) return false;
     return true;
   }
 
-  public async qrCodeGenerator(): Promise<Buffer> {
-    try {
-      const result = await axios.get(this._url);
-      const buffer = Buffer.from(result.data);
-      return buffer;
-    } catch (error) {
-      throw new HttpException(500, error.message);
-    }
-  }
-
-  public async uploadQRToS3(qrBuffer: Buffer): Promise<string> {
-    return 'Hrishi';
-  }
-
   public async updateQRLinkInDB(qrLink: string): Promise<boolean> {
+    const tableOps = await tableOperations.updateTable(
+      this._restaurantID,
+      this._tableID,
+      'table.qrCode',
+      qrLink,
+      false,
+    );
+    console.log(tableOps);
+    if (!tableOps) return false;
     return true;
   }
 }

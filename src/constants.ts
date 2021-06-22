@@ -21,3 +21,10 @@ export const AWSCognito = new AWS.CognitoIdentityServiceProvider({
   region: config.AUTH.region,
   credentials: { secretAccessKey: config.AUTH.secret_key, accessKeyId: config.AUTH.access_key },
 });
+
+export const AWSS3 = new AWS.S3({
+  region: config.AUTH.region,
+  credentials: { secretAccessKey: config.AUTH.secret_key, accessKeyId: config.AUTH.access_key },
+});
+
+export const BUCKET_NAME = 'foodrun-restaurants-data';

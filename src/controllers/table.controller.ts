@@ -34,7 +34,6 @@ class TableController {
     try {
       const { restaurantID, tableID } = <{ restaurantID: string; tableID: string }>req.body;
       const qrURL = `${config.QR_SERVICE.url}?size=${config.QR_SERVICE.size_height}x${config.QR_SERVICE.size_width}&data=${config.QR_SERVICE.food_run_url}/restaurant/${restaurantID}/table/${tableID}`;
-      console.log(qrURL, 'qrURL');
       const QRService = new QRCodeGenerator(restaurantID, tableID, qrURL);
       await QRService.generateAndUploadTableQR();
       res.status(204).send();
