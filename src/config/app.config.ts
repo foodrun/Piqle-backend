@@ -27,6 +27,10 @@ const {
   tokenExpiration,
   ACCESS_TOKEN,
   SECRET_KEY,
+  QR_URL,
+  SIZE_WIDTH,
+  SIZE_HEIGHT,
+  FOOD_RUN_URL,
 } = process.env;
 
 export const config = {
@@ -57,5 +61,11 @@ export const config = {
     cognitoUserPoolId: cognitoUserPoolId,
     tokenUse: tokenUse,
     tokenExpiration: tokenExpiration,
+  },
+  QR_SERVICE: {
+    url: QR_URL,
+    size_width: SIZE_WIDTH,
+    size_height: SIZE_HEIGHT,
+    food_run_url: FOOD_RUN_URL,
   },
 };
