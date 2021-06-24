@@ -1,5 +1,6 @@
 import HttpException from '../../../exceptions/HttpException';
 import { IStatus } from '../../../interfaces/common.interface';
+import { logger } from '../../../utils/logger';
 import { ActivateTableService } from './activate/activateTable';
 
 const activateTableService = new ActivateTableService();
@@ -13,11 +14,10 @@ class TableService {
     memberName: string,
   ): Promise<IStatus> {
     if (!restaurantID || !tableId || !otp) throw new HttpException(400, 'Input Validation Failed');
-    if (!memberID || !memberName)
-      throw new HttpException(
-        400,
-        `Member ID or Mamber Name missing - MemberID: ${memberID}, MamberName: ${memberName}`,
-      );
+    if (!memberID || !memberName) {
+      logger.error(`Member ID or Member Name missing - memberID: ${memberID}, memberName: ${memberName}`);
+      throw new HttpException(400, `Member ID or Member Name missing`);
+    }
     const verifyStatusAndInformation = await activateTableService.activateTable(
       restaurantID,
       tableId,
