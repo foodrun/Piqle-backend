@@ -4,11 +4,8 @@ import { IStatus, ITableActivateBody } from '../interfaces/common.interface';
 import { IGAuth } from '../interfaces/gAuth.interface';
 import { QRCodeGenerator } from '../services/qrCode.service';
 import { tableService } from '../services/RestaurantService/TableService/table.service';
-import { logger } from '../utils/logger';
-
 class TableController {
   public verifyTableOTP = async (req: Request, res: Response, next: NextFunction) => {
-    logger.info('verify endpoint request body', req.body);
     try {
       const { restaurantID, tableID, otp } = <ITableActivateBody>req.body;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
