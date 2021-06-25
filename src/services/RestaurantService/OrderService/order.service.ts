@@ -14,6 +14,7 @@ interface IOrderService {
 export class OrderService implements IOrderService {
   constructor(private _orderDetails: IOrder) {}
   async placeOrder(userDetails: IUser): Promise<{ orderID: string }> {
+    //Check if such a session exists
     if (await this.isTableOccupiedAndHasSession()) {
       const orderID = await orderOperations.createNewOrder(this._orderDetails, userDetails);
       if (orderID) {
