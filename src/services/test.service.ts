@@ -7,10 +7,8 @@ class TestService {
     const snapshot = await dbConfig().collection('restaurants').get();
     const data = snapshot.docs.map(doc => {
       const docData = doc.data();
-      console.log(docData, 'docData');
       return docData;
     });
-    console.log(data, 'data');
     return data;
   }
 }

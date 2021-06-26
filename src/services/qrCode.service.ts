@@ -18,7 +18,6 @@ export class QRCodeGenerator {
       qrLink,
       false,
     );
-    console.log(tableOps);
     if (!tableOps) return false;
     return true;
   }
