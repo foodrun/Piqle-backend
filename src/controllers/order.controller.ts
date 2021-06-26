@@ -12,7 +12,6 @@ class OrderController {
       const orderID = await order.placeOrder({ memberID: userInformation.user_id, memberName: userInformation.name });
       res.status(201).json(orderID);
     } catch (_e) {
-      console.log(_e);
       next(_e);
     }
   };

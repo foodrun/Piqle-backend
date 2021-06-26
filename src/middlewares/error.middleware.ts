@@ -10,7 +10,7 @@ const errorMiddleware = (error: HttpException, req: IUserRequest, res: Response,
   try {
     const status: number = error.status || 500;
     const message: string = error.message || 'Something went wrong';
-    res.status(status).json({ message, requestID: req.id });
+    res.status(status).json({ message });
   } catch (error) {
     next(error);
   }
