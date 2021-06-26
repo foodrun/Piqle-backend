@@ -31,7 +31,6 @@ export const LogOverRide = (req: IUserRequest, res: Response, next: NextFunction
       },
       res: { responseSent: responseSent ? responseSent : 'No Data Defined in Response', responseStatus },
     };
-    console.log(metaLog);
     logger.log('info', 'Metalogs', metaLog);
     oldSend.apply(this, arguments);
   } as Send;
