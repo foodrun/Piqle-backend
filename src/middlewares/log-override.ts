@@ -32,7 +32,7 @@ export const LogOverRide = (req: IUserRequest, res: Response, next: NextFunction
       res: { responseSent: responseSent ? responseSent : 'No Data Defined in Response', responseStatus },
     };
     // logger.log('info', 'Metalogs', metaLog);
-    console.log(metaLog);
+    console.log(JSON.stringify(metaLog));
     oldSend.apply(this, arguments);
   } as Send;
   Userlogger.ResetLogsMetaKey();
