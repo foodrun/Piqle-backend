@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -7,7 +8,6 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import compression from 'compression';
-import bodyParser from 'body-parser';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 
@@ -17,6 +17,8 @@ import { stream } from './utils/logger';
 
 import { config } from './config/app.config';
 import { initializeAdmin } from './database';
+import addRequestId from 'express-request-id';
+import { LogOverRide } from './middlewares/log-override';
 
 export const app = express();
 
@@ -51,11 +53,15 @@ app.use(cors());
 app.use(hpp());
 app.use(helmet());
 app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Routes go here
+
+app.use(addRequestId());
+
+app.use(LogOverRide);
 
 app.use('/api', IndexRoute);
 
