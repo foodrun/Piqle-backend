@@ -6,7 +6,6 @@ import { ITables } from '../../../../interfaces/table.interface';
 import { ISessionDetails, IStatus } from '../../../../interfaces/common.interface';
 import { UserSessionBuilder } from '../../../../helper/userSessionBuilder';
 import { tableOperations } from '../TableOperations/table-operations.service';
-import { logger } from '../../../../utils/logger';
 import { SessionOperations } from '../../SessionService/SessionOperations/session-ops.service';
 
 interface IActivateTableService {
@@ -88,14 +87,13 @@ export class ActivateTableService implements IActivateTableService {
         member_name: memberName,
       });
       const tableData = await session.createNewUserSession(this._tableInformation);
-      const updateCurrentSessionIDInTableDocumentResult = await tableOperations.updateTable<string>(
+      await tableOperations.updateTable<string>(
         restaurantID,
         tableID,
         'table.currentSession',
         tableData.sessionID,
         true,
       );
-      logger.log('info', updateCurrentSessionIDInTableDocumentResult);
       return { success: true, sessionID: tableData.sessionID };
     }
     return { success: false, sessionID: null };

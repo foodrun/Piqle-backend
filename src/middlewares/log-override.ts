@@ -1,5 +1,4 @@
 /* eslint-disable prefer-rest-params */
-import { logger } from '../utils/logger';
 import { Request, NextFunction, Response, Send } from 'express';
 import { Userlogger } from '../logger/UserLogger';
 import { IGAuth } from '../interfaces/gAuth.interface';

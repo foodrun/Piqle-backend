@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { IGAuth } from '../interfaces/gAuth.interface';
 import { IOrder } from '../interfaces/order.interface';
-import { Userlogger } from '../logger/UserLogger';
 import { OrderService } from '../services/RestaurantService/OrderService/order.service';
 
 class OrderController {
@@ -11,7 +10,7 @@ class OrderController {
       const userInformation = <IGAuth>res.locals.gAuth;
       const order = new OrderService(orderInformation);
       const orderID = await order.placeOrder({ memberID: userInformation.user_id, memberName: userInformation.name });
-      res.status(201).send(orderID);
+      res.status(201).json(orderID);
     } catch (_e) {
       console.log(_e);
       next(_e);

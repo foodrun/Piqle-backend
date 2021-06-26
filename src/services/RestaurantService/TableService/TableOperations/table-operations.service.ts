@@ -2,7 +2,6 @@ import { RESTAURANTS, SESSIONS, TABLES } from '../../../../constants';
 import { dbConfig } from '../../../../database';
 import HttpException from '../../../../exceptions/HttpException';
 import { ITables } from '../../../../interfaces/table.interface';
-import { logger } from '../../../../utils/logger';
 
 interface ITableOperations {
   updateTable<T>(
@@ -25,8 +24,6 @@ class TableOperations implements ITableOperations {
       .update({
         [key]: reference ? dbConfig().doc(`${RESTAURANTS}/${restaurantID}/${SESSIONS}/${value}`) : value,
       });
-
-    logger.log('info', res);
     return res;
   }
 
