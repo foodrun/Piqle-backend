@@ -14,7 +14,6 @@ interface IOrderService {
 export class OrderService implements IOrderService {
   constructor(private _orderDetails: IOrder) {}
   async placeOrder(userDetails: IUser): Promise<{ orderID: string }> {
-    //Check if such a session exists
     const sessionOperations = new SessionOperations(this._orderDetails.restaurantID, this._orderDetails.tableID);
     if (!(await sessionOperations.getSession(this._orderDetails.sessionID)))
       throw new HttpException(400, 'Invalid Session ID');
