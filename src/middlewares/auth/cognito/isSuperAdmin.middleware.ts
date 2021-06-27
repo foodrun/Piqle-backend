@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from 'express';
-import { FOOD_RUN_ADMIN } from '../constants';
-import HttpException from '../exceptions/HttpException';
+import { FOOD_RUN_ADMIN } from '../../../constants';
+import HttpException from '../../../exceptions/HttpException';
 
 const isSuperAdmin = (req: Request, res: Response, next: NextFunction): void => {
   const userGroups = res.locals.user['cognito:groups'];

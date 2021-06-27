@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { superAdminController } from '../../../controllers/super-admin.controller';
-import authMiddleware from '../../../middlewares/auth.middleware';
-import isSuperAdmin from '../../../middlewares/isSuperAdmin.middleware';
+import authMiddleware from '../../../middlewares/auth/cognito/auth.middleware';
+import isSuperAdmin from '../../../middlewares/auth/cognito/isSuperAdmin.middleware';
 
 const superAdminRouter = Router();
 

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -7,7 +8,6 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import compression from 'compression';
-import bodyParser from 'body-parser';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 
@@ -17,6 +17,8 @@ import { stream } from './utils/logger';
 
 import { config } from './config/app.config';
 import { initializeAdmin } from './database';
+import addRequestId from 'express-request-id';
+import { LogOverRide } from './middlewares/log-override';
 
 export const app = express();
 
@@ -37,35 +39,32 @@ const env = config.application.environment;
 
 initializeAdmin();
 
-if (env === 'production') {
-  app.use(morgan('combined', { stream }));
-} else if (env === 'development') {
-  app.use(morgan('dev', { stream }));
-}
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).send();
+});
+
+// if (env === 'production') {
+//   app.use(morgan('combined', { stream }));
+// } else if (env === 'development') {
+//   app.use(morgan('dev', { stream }));
+// }
 
 app.use(cors());
 app.use(hpp());
 app.use(helmet());
 app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-//Routes go here
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).send();
-});
-
+app.use(addRequestId());
+app.use(LogOverRide);
 app.use('/api', IndexRoute);
-
 app.use(Sentry.Handlers.errorHandler());
-
 app.use(errorMiddleware);
 
 app
   .listen(config.application.PORT, () => {
     console.log('Server is running - Refer to docs to understand connection details : ' + config.application.PORT);
-    console.log(config, 'config');
   })
   .on('error', function (err) {
     console.log(err);

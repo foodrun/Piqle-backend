@@ -12,8 +12,10 @@ class TableService {
     memberID: string,
     memberName: string,
   ): Promise<IStatus> {
-    if (!restaurantID || !tableId || !otp || !memberID || !memberName)
-      throw new HttpException(400, 'Input Validation Failed');
+    if (!restaurantID || !tableId || !otp) throw new HttpException(400, 'Input Validation Failed');
+    if (!memberID || !memberName) {
+      throw new HttpException(400, `Member ID or Member Name missing`);
+    }
     const verifyStatusAndInformation = await activateTableService.activateTable(
       restaurantID,
       tableId,
