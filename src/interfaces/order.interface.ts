@@ -12,7 +12,7 @@ interface IItems {
   img_url: string;
   food_id: string;
   quantity: string;
-  customizations: Array<ICustomizations>;
+  customizable: Array<ICustomizations>;
 }
 
 interface IFood {

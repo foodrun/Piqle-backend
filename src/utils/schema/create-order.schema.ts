@@ -20,7 +20,7 @@ export const orderSchema = Joi.object().keys({
                 img_url: Joi.string().required(),
                 food_id: Joi.string().required(),
                 quantity: Joi.number().required(),
-                customizations: Joi.array().items(
+                customizable: Joi.array().items(
                   Joi.object().keys({
                     optionTitle: Joi.string().required(),
                     optionPrice: Joi.number().required(),
