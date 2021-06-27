@@ -7,6 +7,7 @@ interface ISessionOperations {
   getAllSessions();
   updateSessionMembers(sessionID: string, memberID: string, memberName: string): Promise<FirebaseFirestore.WriteResult>;
   updateSessionOrders(sessionID: string, orderID: string): Promise<FirebaseFirestore.WriteResult>;
+  getSession(sessionID: string): Promise<boolean>;
 }
 
 export class SessionOperations implements ISessionOperations {
@@ -52,5 +53,19 @@ export class SessionOperations implements ISessionOperations {
     });
 
     return unionRes;
+  }
+
+  async getSession(sessionID: string): Promise<boolean> {
+    const sessionDocRef = dbConfig()
+      .collection(RESTAURANTS)
+      .doc(this._restaurantID)
+      .collection(SESSIONS)
+      .doc(sessionID);
+    const session = await sessionDocRef.get();
+    if (!session.exists) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

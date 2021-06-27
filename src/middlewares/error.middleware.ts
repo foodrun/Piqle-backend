@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import HttpException from '../exceptions/HttpException';
-import { logger } from '../utils/logger';
 
 interface IUserRequest extends Request {
   id: string;
