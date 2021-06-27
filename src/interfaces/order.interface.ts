@@ -10,7 +10,7 @@ interface IItems {
   title: string;
   price: number;
   img_url: string;
-  food_id: string;
+  id: string;
   quantity: string;
   customizable: Array<ICustomizations>;
 }
