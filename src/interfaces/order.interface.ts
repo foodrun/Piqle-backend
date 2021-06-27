@@ -1,6 +1,8 @@
 interface ICustomizations {
   optionTitle: string;
   optionPrice: number;
+  optionQuantity: number;
+  optionID: string;
 }
 
 interface IItems {

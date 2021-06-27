@@ -25,6 +25,7 @@ export const orderSchema = Joi.object().keys({
                     optionTitle: Joi.string().required(),
                     optionPrice: Joi.number().required(),
                     optionQuantity: Joi.number().required(),
+                    optionID: Joi.string().required(),
                   }),
                 ),
               }),
