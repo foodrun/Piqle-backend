@@ -6,14 +6,12 @@ import { Request, Response } from 'express';
 
 import helmet from 'helmet';
 import hpp from 'hpp';
-import morgan from 'morgan';
 import compression from 'compression';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 
 import IndexRoute from './routes/index.route';
 import errorMiddleware from './middlewares/error.middleware';
-import { stream } from './utils/logger';
 
 import { config } from './config/app.config';
 import { initializeAdmin } from './database';
@@ -23,6 +21,7 @@ import { LogOverRide } from './middlewares/log-override';
 export const app = express();
 
 Sentry.init({
+  environment: config.application.environment,
   dsn: config.LOGGING.sentry_url,
   integrations: [
     // enable HTTP calls tracing
@@ -34,8 +33,6 @@ Sentry.init({
 });
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
-
-const env = config.application.environment;
 
 initializeAdmin();
 
@@ -64,7 +61,12 @@ app.use(errorMiddleware);
 
 app
   .listen(config.application.PORT, () => {
-    console.log('Server is running - Refer to docs to understand connection details : ' + config.application.PORT);
+    console.log(
+      'Server is running - on PORT : ' +
+        config.application.PORT +
+        ' in environment - ' +
+        config.application.environment,
+    );
   })
   .on('error', function (err) {
     console.log(err);

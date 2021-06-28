@@ -6,7 +6,9 @@
   "license": "ISC",
   "scripts": {
     "start": "npm run build && cross-env NODE_ENV=production node build/server.js",
-    "dev": "cross-env NODE_ENV=develop nodemon",
+    "testing": "npm run build && cross-env NODE_ENV=testing node build/server.js",
+    "develop": "npm run build && cross-env NODE_ENV=develop node build/server.js",
+    "local": "cross-env NODE_ENV=local nodemon",
     "build": "tsc",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
@@ -14,8 +16,8 @@
     "push:image": "docker build -t foodrun-node-api . && docker tag foodrun-node-api:latest 451093644216.dkr.ecr.ap-south-1.amazonaws.com/foodrun-node-api-testing:latest && docker push 451093644216.dkr.ecr.ap-south-1.amazonaws.com/foodrun-node-api-testing:latest"
   },
   "dependencies": {
-    "@sentry/node": "^6.3.5",
-    "@sentry/tracing": "^6.3.5",
+    "@sentry/node": "^6.8.0",
+    "@sentry/tracing": "^6.8.0",
     "@types/axios": "^0.14.0",
     "aws-sdk": "^2.932.0",
     "axios": "^0.21.1",
