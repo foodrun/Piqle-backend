@@ -92,7 +92,7 @@ workflows:
           cluster-name: "food-runner-ecs-node"
           container-image-name-updates: "container=food-run-container,tag=${CIRCLE_SHA1}"
           family: "food-run-task-definition"
-          service-name: "foodrun-ecs-dev-dervice"
+          service-name: "foodrun-ecs-dev"
           requires:
             - build_development_api_server
           filters:
