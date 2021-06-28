@@ -56,7 +56,17 @@ app.use(cookieParser());
 app.use(addRequestId());
 app.use(LogOverRide);
 app.use('/api', IndexRoute);
-app.use(Sentry.Handlers.errorHandler());
+app.use(
+  Sentry.Handlers.errorHandler({
+    shouldHandleError(error) {
+      // Capture all 404 and 500 errors
+      if (error.status === 422 || error.status === 500 || error.status === 401) {
+        return true;
+      }
+      return false;
+    },
+  }),
+);
 app.use(errorMiddleware);
 
 app
