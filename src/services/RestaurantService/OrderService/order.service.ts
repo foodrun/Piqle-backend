@@ -12,7 +12,7 @@ interface IOrderService {
 }
 
 export class OrderService implements IOrderService {
-  constructor(private _orderDetails: IOrder) {}
+  constructor(private _orderDetails?: IOrder) {}
   async placeOrder(userDetails: IUser): Promise<{ orderID: string }> {
     const sessionOperations = new SessionOperations(this._orderDetails.restaurantID, this._orderDetails.tableID);
     if (!(await sessionOperations.getSession(this._orderDetails.sessionID)))
@@ -45,6 +45,11 @@ export class OrderService implements IOrderService {
 
     if (tableOccupiedStatus && tableSession) return true;
 
+    return false;
+  }
+
+  async updateOrderStatus(restaurantID: string, orderID: string, orderStatus: string): Promise<boolean> {
+    if (await orderOperations.updateOrder(restaurantID, orderID, orderStatus)) return true;
     return false;
   }
 }

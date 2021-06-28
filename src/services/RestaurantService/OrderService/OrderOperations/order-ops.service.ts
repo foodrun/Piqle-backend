@@ -36,6 +36,20 @@ class OrderOperations implements IOrderClass {
       });
     return orderID;
   }
+
+  async updateOrder(restaurantID: string, orderID: string, orderStatus: string): Promise<boolean> {
+    try {
+      await dbConfig()
+        .collection(RESTAURANTS)
+        .doc(restaurantID)
+        .collection(ORDERS)
+        .doc(orderID)
+        .update({ orderStatus: orderStatus });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }
 
 export const orderOperations = new OrderOperations();

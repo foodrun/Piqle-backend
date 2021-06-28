@@ -18,12 +18,14 @@ export const orderSchema = Joi.object().keys({
                 title: Joi.string().required(),
                 price: Joi.number().required(),
                 img_url: Joi.string().required(),
-                food_id: Joi.string().required(),
+                id: Joi.string().required(),
                 quantity: Joi.number().required(),
-                customizations: Joi.array().items(
+                customizable: Joi.array().items(
                   Joi.object().keys({
                     optionTitle: Joi.string().required(),
                     optionPrice: Joi.number().required(),
+                    optionQuantity: Joi.number().required(),
+                    optionId: Joi.string().required(),
                   }),
                 ),
               }),

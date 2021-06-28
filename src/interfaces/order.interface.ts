@@ -1,6 +1,8 @@
 interface ICustomizations {
   optionTitle: string;
   optionPrice: number;
+  optionQuantity: number;
+  optionID: string;
 }
 
 interface IItems {
@@ -8,9 +10,9 @@ interface IItems {
   title: string;
   price: number;
   img_url: string;
-  food_id: string;
+  id: string;
   quantity: string;
-  customizations: Array<ICustomizations>;
+  customizable: Array<ICustomizations>;
 }
 
 interface IFood {
