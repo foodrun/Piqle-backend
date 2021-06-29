@@ -17,7 +17,7 @@ export const orderSchema = Joi.object().keys({
                 indicator: Joi.string().required(),
                 title: Joi.string().required(),
                 price: Joi.number().required(),
-                img_url: Joi.string().required(),
+                img_url: Joi.string(),
                 id: Joi.string().required(),
                 quantity: Joi.number().required(),
                 customizable: Joi.array().items(
