@@ -32,7 +32,11 @@ class TableOperations implements ITableOperations {
     const allRestaurantTableInformation = <ITables[]>tables.docs.map(docs => {
       return docs.data();
     });
-    const tableExistsInformation = allRestaurantTableInformation.some(table => table.table.tableKey === tableID);
+    const tableExistsInformation = allRestaurantTableInformation.some(table => {
+      if (table && table.table && table.table.tableKey) {
+        return table.table.tableKey === tableID;
+      }
+    });
     if (!tableExistsInformation) throw new HttpException(404, 'Table Does Not Exist');
 
     const requestedTableInformation = <ITables[]>allRestaurantTableInformation.filter(table => {
