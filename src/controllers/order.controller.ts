@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import HttpException from '../exceptions/HttpException';
 import { IGAuth } from '../interfaces/gAuth.interface';
 import { IOrder } from '../interfaces/order.interface';
 import { OrderService } from '../services/RestaurantService/OrderService/order.service';
@@ -14,6 +15,8 @@ class OrderController {
       const orderInformation = <IOrder>req.body;
       const userInformation = <IGAuth>res.locals.gAuth;
       const order = new OrderService(orderInformation);
+      if (!userInformation || !userInformation.user_id || !userInformation.name)
+        throw new HttpException(400, 'Member ID or Name Missing');
       const orderID = await order.placeOrder({ memberID: userInformation.user_id, memberName: userInformation.name });
       res.status(201).json(orderID);
     } catch (_e) {
