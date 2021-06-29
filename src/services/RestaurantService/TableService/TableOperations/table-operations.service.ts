@@ -35,9 +35,11 @@ class TableOperations implements ITableOperations {
     const tableExistsInformation = allRestaurantTableInformation.some(table => table.table.tableKey === tableID);
     if (!tableExistsInformation) throw new HttpException(404, 'Table Does Not Exist');
 
-    const requestedTableInformation = <ITables[]>(
-      allRestaurantTableInformation.filter(table => table.table.tableKey === tableID)
-    );
+    const requestedTableInformation = <ITables[]>allRestaurantTableInformation.filter(table => {
+      if (table && table.table && table.table.tableKey) {
+        return table.table.tableKey === tableID;
+      }
+    });
     this._tableInformation = requestedTableInformation[0];
     return this._tableInformation;
   }
