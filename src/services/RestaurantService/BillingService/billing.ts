@@ -19,7 +19,7 @@ enum Bill {
 }
 
 export class BillingService {
-  constructor(private _orders?: IOrder, private _simpleCategoryCalc?: IFood[]) {}
+  constructor(private _orders: IOrder) {}
   private _foodOrderBill: number;
   private _drinksOrderBill: number;
   private _totalOrderBill: number;
