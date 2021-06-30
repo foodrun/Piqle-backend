@@ -57,8 +57,10 @@ export class BillingService {
               cusItems => cusItems.optionQuantity > 0 && cusItems.optionQuantity !== null,
             );
             customizationsWithQuantityGreaterThanZero.forEach(customization => {
-              const totalItemCost = customization.optionPrice * customization.optionQuantity;
-              OrderCategoryWiseBill[categoryName] += totalItemCost;
+              if (customization.optionQuantity > 0) {
+                const totalItemCost = customization.optionPrice * customization.optionQuantity;
+                OrderCategoryWiseBill[categoryName] += totalItemCost;
+              }
             });
           } else {
             if (item.quantity > 0) {
