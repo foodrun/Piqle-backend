@@ -1,21 +1,28 @@
-interface ICustomizations {
+export interface ICustomizations {
   optionTitle: string;
   optionPrice: number;
   optionQuantity: number;
-  optionID: string;
+  optionId: string;
 }
 
-interface IItems {
+export interface IItem {
   indicator: string;
   title: string;
   price: number;
   img_url: string;
-  id: string;
-  quantity: string;
-  customizable: Array<ICustomizations>;
+  food_id?: string;
+  id?: string;
+  quantity: number;
+  customizable?: Array<ICustomizations>;
 }
 
-interface IFood {
+export interface IItems {
+  category_name: string;
+  category_id: string;
+  items: Array<IItem>;
+}
+
+export interface IFood {
   consumable_type: string;
   details: Array<IItems>;
 }
