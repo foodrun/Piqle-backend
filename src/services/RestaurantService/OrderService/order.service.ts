@@ -1,7 +1,10 @@
 import HttpException from '../../../exceptions/HttpException';
 import { IUser } from '../../../interfaces/common.interface';
 import { IOrder } from '../../../interfaces/order.interface';
+import { ICategorwiseBill } from '../../../interfaces/orderBill.interface';
 import { ITables } from '../../../interfaces/table.interface';
+import { OrderBillObjectGenerator } from '../../../utils/orderBillObjectGenerator';
+import { BillingService } from '../BillingService/billing';
 import { SessionOperations } from '../SessionService/SessionOperations/session-ops.service';
 import { tableOperations } from '../TableService/TableOperations/table-operations.service';
 import { orderOperations } from './OrderOperations/order-ops.service';
@@ -11,6 +14,14 @@ interface IOrderService {
   isTableOccupiedAndHasSession(restaurantID: string, tableID: string): Promise<boolean>;
 }
 
+enum Bill {
+  TOTAL = 'total',
+  FOOD = 'food',
+  DRINKS = 'drinks',
+  FOOD_CATEGORIES = 'foodCategories',
+  DRINKS_CATEGORIES = 'drinksCategories',
+}
+
 export class OrderService implements IOrderService {
   constructor(private _orderDetails?: IOrder) {}
   async placeOrder(userDetails: IUser): Promise<{ orderID: string }> {
@@ -18,13 +29,27 @@ export class OrderService implements IOrderService {
     if (!(await sessionOperations.getSession(this._orderDetails.sessionID)))
       throw new HttpException(400, 'Invalid Session ID');
     if (await this.isTableOccupiedAndHasSession()) {
-      const orderID = await orderOperations.createNewOrder(this._orderDetails, userDetails);
+      const billing = new BillingService(this._orderDetails);
+      billing.itemsSetter();
+      billing.calculateOrderTotal();
+      const orderID = await orderOperations.createNewOrder(
+        this._orderDetails,
+        userDetails,
+        OrderBillObjectGenerator(
+          billing.Getter(Bill.TOTAL) as number,
+          billing.Getter(Bill.FOOD) as number,
+          billing.Getter(Bill.DRINKS) as number,
+          billing.Getter(Bill.FOOD_CATEGORIES) as ICategorwiseBill,
+          billing.Getter(Bill.DRINKS_CATEGORIES) as ICategorwiseBill,
+        ),
+      );
       if (orderID) {
         const updateSessionWithOrderID = await sessionOperations.updateSessionOrders(
           this._orderDetails.sessionID,
           orderID.id,
         );
         if (updateSessionWithOrderID) {
+          //Add in logic for Billing
           return { orderID: orderID.id };
         } else {
           throw new HttpException(500, 'Something went wrong');
