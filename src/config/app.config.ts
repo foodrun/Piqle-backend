@@ -27,12 +27,14 @@ const {
   SIZE_WIDTH,
   SIZE_HEIGHT,
   FOOD_RUN_URL,
+  AUTH,
 } = process.env;
 
 export const config = {
   application: {
     PORT: PORT,
     environment: NODE_ENV,
+    superAdminAuthKey: AUTH,
   },
   DB: {
     type: FIRESTORE_TYPE,

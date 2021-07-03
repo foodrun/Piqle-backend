@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ADMINS } from '../constants';
 import HttpException from '../exceptions/HttpException';
 import { IAddUser } from '../interfaces/common.interface';
+import { IGAuth } from '../interfaces/gAuth.interface';
 import { superAdmin } from '../services/SuperAdminService/SuperAdmin.service';
 
 class SuperAdminController {
@@ -18,6 +19,17 @@ class SuperAdminController {
       } else {
         next(error);
       }
+    }
+  };
+
+  public updateUserToSuperAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    const { user_id } = <IGAuth>res.locals.gAuth;
+
+    const status = await superAdmin.addSuperAdminCustomAttributes(user_id);
+    if (status) {
+      res.status(201).send();
+    } else {
+      res.status(400).send();
     }
   };
 }
