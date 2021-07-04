@@ -7,7 +7,7 @@ import { IAddUser } from '../interfaces/common.interface';
 import { logger } from '../utils/logger';
 
 export class AddNewUser {
-  constructor(private user: IAddUser) {}
+  constructor(private user?: IAddUser) {}
   public async addNewUser(): Promise<boolean> {
     const { username, password, restaurantID, email, phoneNumber } = this.user;
     const userCreationResponse = <AdminCreateUserResponse>(
