@@ -28,6 +28,7 @@ const {
   SIZE_HEIGHT,
   FOOD_RUN_URL,
   AUTH,
+  GOOGLE_AUTH_API_KEY,
 } = process.env;
 
 export const config = {
@@ -59,6 +60,7 @@ export const config = {
     cognitoUserPoolId: cognitoUserPoolId,
     tokenUse: tokenUse,
     tokenExpiration: tokenExpiration,
+    googleAuthAPIKey: GOOGLE_AUTH_API_KEY,
   },
   QR_SERVICE: {
     url: QR_URL,
