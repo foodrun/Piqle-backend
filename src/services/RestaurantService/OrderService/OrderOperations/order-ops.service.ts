@@ -3,6 +3,7 @@
 //Delete Order
 //Update Order
 
+import * as admin from 'firebase-admin';
 import { ORDERS, RESTAURANTS, SESSIONS, TABLES } from '../../../../constants';
 import { dbConfig } from '../../../../database';
 import { OrderStatus } from '../../../../enums/orderStatus.enum';
@@ -37,6 +38,8 @@ class OrderOperations implements IOrderClass {
         orderBillDetails,
         sessionID: dbConfig().doc(`/${RESTAURANTS}/${orderDetails.restaurantID}/${SESSIONS}/${sessionID}`),
         tableID: dbConfig().doc(`/${RESTAURANTS}/${orderDetails.restaurantID}/${TABLES}/${tableID}`),
+        start_timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+        end_timestamp: null,
       });
     return orderID;
   }
