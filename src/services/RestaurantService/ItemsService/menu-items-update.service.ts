@@ -15,7 +15,6 @@ export class ItemsUpdateService {
     const newItem = this._menuItemToUpdate;
     delete newItem.type;
     const currentMenu = this._menuData;
-    // check to see if the item exists array of item objects through item ID
     const doesItemToUpdateExistInCurrentMenu = this.checkIfItemExistsInCurrentMenu();
     if (!doesItemToUpdateExistInCurrentMenu)
       throw new HttpException(400, 'Item to update does not exist in current menu');
