@@ -23,8 +23,7 @@ class SuperAdminService {
           role: {
             isRestaurantAdmin: false,
             restaurantID: null,
-            isRestaurantWaiter: false,
-            isRestaurantChef: false,
+            isRestaurantStaff: false,
           },
         })
         .then(() => {
@@ -66,8 +65,7 @@ class SuperAdminService {
             role: {
               isRestaurantAdmin: true,
               restaurantID: restaurantID,
-              isRestaurantWaiter: false,
-              isRestaurantChef: false,
+              isRestaurantStaff: false,
             },
           })
           .then(() => {
