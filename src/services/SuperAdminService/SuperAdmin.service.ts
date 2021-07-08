@@ -2,7 +2,7 @@ import HttpException from '../../exceptions/HttpException';
 import { IAddUser } from '../../interfaces/common.interface';
 import { AddNewUser } from '../addUser.service';
 import * as admin from 'firebase-admin';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { config as conf } from '../../config/app.config';
 
 class SuperAdminService {
@@ -40,44 +40,33 @@ class SuperAdminService {
     userName: string,
     password: string,
   ): Promise<boolean> {
-    let status: boolean;
+    const data = JSON.stringify({
+      email: userName,
+      password: password,
+      returnSecureToken: true,
+    });
+
+    // console.log(data);
+
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${conf.AUTH.googleAuthAPIKey}`;
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
     try {
-      const data = JSON.stringify({
-        email: userName,
-        password: password,
-        returnSecureToken: true,
-      });
-
-      const config = {
-        method: 'post',
-        url: `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${conf.AUTH.googleAuthAPIKey}`,
-        headers: {
-          'Content-Type': 'application/json',
+      const result = await axios.post(url, data, config);
+      await admin.auth().setCustomUserClaims(result.data.localId, {
+        superAdmin: false,
+        role: {
+          isRestaurantAdmin: true,
+          restaurantID: restaurantID,
+          isRestaurantStaff: false,
         },
-        data: data,
-      };
-
-      axios(config as AxiosRequestConfig).then(function (response) {
-        admin
-          .auth()
-          .setCustomUserClaims(response.data.localId, {
-            superAdmin: false,
-            role: {
-              isRestaurantAdmin: true,
-              restaurantID: restaurantID,
-              isRestaurantStaff: false,
-            },
-          })
-          .then(() => {
-            console.log('Updated to Restaurant Admin');
-            status = true;
-          })
-          .catch(error => {
-            console.log(error);
-            status = false;
-          });
       });
-      return status;
+      return true;
     } catch (error) {
       return false;
     }
@@ -85,5 +74,3 @@ class SuperAdminService {
 }
 
 export const superAdmin = new SuperAdminService();
-
-// localId

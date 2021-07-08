@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { ADMINS } from '../constants';
 import HttpException from '../exceptions/HttpException';
 import { IAddUser } from '../interfaces/common.interface';
 import { IGAuth } from '../interfaces/gAuth.interface';
@@ -8,7 +7,6 @@ import { superAdmin } from '../services/SuperAdminService/SuperAdmin.service';
 class SuperAdminController {
   public addNewAdminUser = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.body as IAddUser;
-    if (user.group !== ADMINS) user['group'] = ADMINS;
     try {
       const response = await superAdmin.addNewRestaurantAdmin(user);
       res.status(200).send(response);
