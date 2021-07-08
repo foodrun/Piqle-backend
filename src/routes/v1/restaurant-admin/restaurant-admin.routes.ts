@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { restaurantAdminController } from '../../../controllers/restaurant-admin.controller';
 import authMiddleware from '../../../middlewares/auth/cognito/auth.middleware';
 import isAdmin from '../../../middlewares/auth/cognito/isAdmin.middleware';
+import { UpdateMenuItemValidator } from '../../../middlewares/validator/menuitem-update.validator';
 
 const restaurantAdminRouter = Router();
 
@@ -14,6 +15,7 @@ restaurantAdminRouter.post(
 
 restaurantAdminRouter.put(
   '/restaurant-management/update-menu-item',
+  UpdateMenuItemValidator,
   restaurantAdminController.updateRestaurantMenuItem,
 );
 
