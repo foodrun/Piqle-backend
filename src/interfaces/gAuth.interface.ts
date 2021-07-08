@@ -6,7 +6,6 @@ export interface IGAuth {
   role?: {
     isRestaurantAdmin?: boolean;
     restaurantID?: null | string;
-    isRestaurantWaiter?: boolean;
-    isRestaurantChef?: boolean;
+    isRestaurantStaff?: boolean;
   };
 }
