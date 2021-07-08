@@ -6,8 +6,7 @@ export class ItemsUpdateService {
   private _menuData: IMenu;
   private _updatedMenuData: IMenu;
 
-  setMenuData(data: IMenu) {
-    // Call when we fetch menu object from DB
+  setMenuData(data: IMenu): void {
     this._menuData = data;
   }
 
@@ -28,7 +27,7 @@ export class ItemsUpdateService {
     return this._updatedMenuData;
   }
 
-  checkIfItemExistsInCurrentMenu(): boolean {
+  private checkIfItemExistsInCurrentMenu(): boolean {
     return !!this._menuData.items.find(item => item.id === this._menuItemToUpdate.id);
   }
 }

@@ -20,5 +20,6 @@ export interface IMenu {
 }
 
 export interface IMenuUpdate extends IMenuItem {
-  type: string; //Food or drinks
+  type: string;
+  restaurantID: string;
 }

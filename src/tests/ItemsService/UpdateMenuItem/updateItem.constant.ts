@@ -28,5 +28,6 @@ export const UpdateItem: IMenuUpdate = {
   ],
   indicator: 'Non-Veg',
   availibility: false,
-  type: 'food',
+  type: 'food_data',
+  restaurantID: 'naifqEdhimmq9PX9Rqko',
 };
