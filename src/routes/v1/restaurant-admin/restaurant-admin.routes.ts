@@ -12,4 +12,9 @@ restaurantAdminRouter.post(
   restaurantAdminController.addNewRestaurantStaff,
 );
 
+restaurantAdminRouter.put(
+  '/restaurant-management/update-menu-item',
+  restaurantAdminController.updateRestaurantMenuItem,
+);
+
 export default restaurantAdminRouter;

@@ -1,7 +1,7 @@
 export interface ICustomizations {
   optionTitle: string;
   optionPrice: number;
-  optionQuantity: number;
+  optionQuantity?: number;
   optionId: string;
 }
 
