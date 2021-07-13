@@ -25,8 +25,11 @@ enum Bill {
 export class OrderService implements IOrderService {
   constructor(private _orderDetails?: INewOrder) {}
   async placeOrder(userDetails: IUser): Promise<{ orderID: string }> {
-    const sessionOperations = new SessionOperations(this._orderDetails.restaurantID, this._orderDetails.tableID);
-    if (!(await sessionOperations.getSession(this._orderDetails.sessionID)))
+    const sessionOperations = new SessionOperations(
+      this._orderDetails.restaurantID,
+      (this._orderDetails.tableID as unknown) as string,
+    );
+    if (!(await sessionOperations.getSession((this._orderDetails.sessionID as unknown) as string)))
       throw new HttpException(400, 'Invalid Session ID');
     if (await this.isTableOccupiedAndHasSession()) {
       // const billing = new BillingService(this._orderDetails);
@@ -45,7 +48,7 @@ export class OrderService implements IOrderService {
       );
       if (orderID) {
         const updateSessionWithOrderID = await sessionOperations.updateSessionOrders(
-          this._orderDetails.sessionID,
+          (this._orderDetails.sessionID as unknown) as string,
           orderID.id,
         );
         if (updateSessionWithOrderID) {
@@ -62,7 +65,7 @@ export class OrderService implements IOrderService {
 
   async isTableOccupiedAndHasSession(): Promise<boolean> {
     const tableInformation = <ITables>(
-      await tableOperations.getTable(this._orderDetails.restaurantID, this._orderDetails.tableID)
+      await tableOperations.getTable(this._orderDetails.restaurantID, (this._orderDetails.tableID as unknown) as string)
     );
 
     const tableOccupiedStatus = tableInformation.table.tableOccupied;
