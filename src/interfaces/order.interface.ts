@@ -50,5 +50,6 @@ export interface IOrderItem {
   indicator: string;
   price: number;
   title: string;
+  quantity: number;
   customizable: Array<ICustomizations>;
 }
