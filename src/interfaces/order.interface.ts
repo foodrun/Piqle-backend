@@ -33,3 +33,22 @@ export interface IOrder {
   sessionID: string;
   order: Array<IFood>;
 }
+
+export interface INewOrder {
+  restaurantID: string;
+  tableID: string;
+  sessionID: string;
+  order: Array<IOrderItem>;
+}
+
+export interface IOrderItem {
+  category_id: string;
+  category_name: string;
+  description: string;
+  id: string;
+  img_url: string;
+  indicator: string;
+  price: number;
+  title: string;
+  customizable: Array<ICustomizations>;
+}

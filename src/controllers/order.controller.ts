@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import HttpException from '../exceptions/HttpException';
 import { IGAuth } from '../interfaces/gAuth.interface';
-import { IOrder } from '../interfaces/order.interface';
+import { INewOrder, IOrder } from '../interfaces/order.interface';
 import { OrderService } from '../services/RestaurantService/OrderService/order.service';
 
 interface IUpdateOrderStatus {
@@ -12,7 +12,7 @@ interface IUpdateOrderStatus {
 class OrderController {
   public createNewTableOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const orderInformation = <IOrder>req.body;
+      const orderInformation = <INewOrder>req.body;
       const userInformation = <IGAuth>res.locals.gAuth;
       const order = new OrderService(orderInformation);
       if (!userInformation || !userInformation.user_id || !userInformation.name)

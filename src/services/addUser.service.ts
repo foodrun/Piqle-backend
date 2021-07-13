@@ -17,8 +17,8 @@ export class AddNewUser {
     );
     logger.log('info', userCreationResponse);
     if (userCreationResponse.User.UserStatus === UserStatus.CHANGE_PASSWORD)
-      await this.addNewUserToGroup(this.user.group);
-    return true;
+      // await this.addNewUserToGroup(this.user.group);
+      return true;
   }
 
   public async addNewUserToGroup(group: string): Promise<unknown> {

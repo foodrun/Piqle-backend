@@ -1,6 +1,6 @@
 import HttpException from '../../../exceptions/HttpException';
 import { IUser } from '../../../interfaces/common.interface';
-import { IOrder } from '../../../interfaces/order.interface';
+import { INewOrder, IOrder } from '../../../interfaces/order.interface';
 import { ICategorwiseBill } from '../../../interfaces/orderBill.interface';
 import { ITables } from '../../../interfaces/table.interface';
 import { OrderBillObjectGenerator } from '../../../utils/orderBillObjectGenerator';
@@ -23,25 +23,25 @@ enum Bill {
 }
 
 export class OrderService implements IOrderService {
-  constructor(private _orderDetails?: IOrder) {}
+  constructor(private _orderDetails?: INewOrder) {}
   async placeOrder(userDetails: IUser): Promise<{ orderID: string }> {
     const sessionOperations = new SessionOperations(this._orderDetails.restaurantID, this._orderDetails.tableID);
     if (!(await sessionOperations.getSession(this._orderDetails.sessionID)))
       throw new HttpException(400, 'Invalid Session ID');
     if (await this.isTableOccupiedAndHasSession()) {
-      const billing = new BillingService(this._orderDetails);
-      billing.itemsSetter();
-      billing.calculateOrderTotal();
+      // const billing = new BillingService(this._orderDetails);
+      // billing.itemsSetter();
+      // billing.calculateOrderTotal();
       const orderID = await orderOperations.createNewOrder(
         this._orderDetails,
         userDetails,
-        OrderBillObjectGenerator(
-          billing.Getter(Bill.TOTAL) as number,
-          billing.Getter(Bill.FOOD) as number,
-          billing.Getter(Bill.DRINKS) as number,
-          billing.Getter(Bill.FOOD_CATEGORIES) as ICategorwiseBill,
-          billing.Getter(Bill.DRINKS_CATEGORIES) as ICategorwiseBill,
-        ),
+        // OrderBillObjectGenerator(
+        //   billing.Getter(Bill.TOTAL) as number,
+        //   billing.Getter(Bill.FOOD) as number,
+        //   billing.Getter(Bill.DRINKS) as number,
+        //   billing.Getter(Bill.FOOD_CATEGORIES) as ICategorwiseBill,
+        //   billing.Getter(Bill.DRINKS_CATEGORIES) as ICategorwiseBill,
+        // ),
       );
       if (orderID) {
         const updateSessionWithOrderID = await sessionOperations.updateSessionOrders(

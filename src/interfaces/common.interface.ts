@@ -2,7 +2,9 @@ export interface IAddUser {
   email: string;
   restaurantID: string;
   password: string;
-  userName?: string;
+  username?: string;
+  phoneNumber?: string;
+  userName: string;
 }
 
 export interface ITableActivateBody {
