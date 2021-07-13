@@ -1,160 +1,59 @@
-import { IOrder } from '../../interfaces/order.interface';
+import { INewOrder } from '../../interfaces/order.interface';
 
-export const order: IOrder = {
-  sessionID: 'FFpDcKmegOE2uSmE96Zz',
+export const order: INewOrder = {
+  sessionID: ('Rv0ye3q935oQgFeGiFJH' as unknown) as FirebaseFirestore.DocumentReference,
   restaurantID: 'naifqEdhimmq9PX9Rqko',
-  tableID: 'RaBXx4Wd1I7Lw3GIYWe7',
+  tableID: ('SkN64WZEZnQktfcQLDbZ' as unknown) as FirebaseFirestore.DocumentReference,
+  end_timestamp: ('13 July 2021 at 17:55:30 UTC+5:30' as unknown) as FirebaseFirestore.Timestamp,
+  start_timestamp: ('13 July 2021 at 17:55:30 UTC+5:30' as unknown) as FirebaseFirestore.Timestamp,
+  memberID: '99kLqf4xEKM7PD4wpzsSf7M0qZc2',
+  memberName: 'Vladimir',
+  orderStatus: 'delivered',
   order: [
     {
-      consumable_type: 'food',
-      details: [
+      price: 475,
+      category_name: 'Main Course',
+      img_url:
+        'https://www.simplyrecipes.com/thmb/ZO7EpqTvX4-3oWZJ_bEoyPgcaQ4=/1600x1600/smart/filters:no_upscale()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2017__02__2017-02-27-ChickenTikkaMasala-16-d8f19c6207b849be8a63695c04a88ec2.jpg',
+      description: '',
+      title: 'Chicken Tikka masala',
+      category_id: 'clYxQf15MIATJ1Jv78Zk',
+      id: '3127140075ac024329489f2197e4ac0a',
+      indicator: 'Non-Veg',
+      quantity: 4,
+      customizable: [
         {
-          category_name: 'starter',
-          category_id: 'AF2Vrtz7bZBYrqVoEtuA',
-          items: [
-            {
-              indicator: 'veg',
-              title: 'Chilli BabyCorn',
-              price: 700,
-              img_url: 'https://5.imimg.com/data5/BR/JP/GLAD-28464664/paneer-manchurian-500x500.png',
-              food_id: 'fdc515448a014b1258e3dbdc2a487e87',
-              quantity: 3,
-              customizable: [],
-            },
-            {
-              indicator: 'veg',
-              title: 'Paneer Manchurian',
-              price: 500,
-              img_url: 'https://5.imimg.com/data5/BR/JP/GLAD-28464664/paneer-manchurian-500x500.png',
-              food_id: 'fdc515448a014b1258e3dbdc2a487e87',
-              quantity: 2,
-              customizable: [
-                {
-                  optionTitle: 'Medium (Serves 5-7)',
-                  optionPrice: 400,
-                  optionQuantity: 1,
-                  optionId: '1234',
-                },
-              ],
-            },
-            {
-              indicator: 'veg',
-              title: 'Gobi Manchurian',
-              price: 500,
-              img_url: 'https://5.imimg.com/data5/BR/JP/GLAD-28464664/paneer-manchurian-500x500.png',
-              food_id: 'fdc515448a014b1258e3dbdc2a487e89',
-              quantity: 2,
-              customizable: [
-                {
-                  optionTitle: 'Medium (Serves 5-7)',
-                  optionPrice: 400,
-                  optionQuantity: 1,
-                  optionId: '1234',
-                },
-                {
-                  optionTitle: 'Large (Serves 6-8)',
-                  optionPrice: 600,
-                  optionQuantity: 0,
-                  optionId: '1234',
-                },
-              ],
-            },
-          ],
+          optionId: 'clYxQf15MIATJ1Jv78ZkOP1',
+          optionTitle: 'Small (Serves 1-2)',
+          optionPrice: 230,
+          optionQuantity: 0,
+        },
+        {
+          optionTitle: 'Medium (Serves 2-4))',
+          optionPrice: 240,
+          optionId: 'clYxQf15MIATJ1Jv78ZkOP2',
+          optionQuantity: 5,
+        },
+        {
+          optionId: 'clYxQf15MIATJ1Jv78ZkOP3',
+          optionPrice: 650,
+          optionTitle: 'Large (Serves 6-9)',
+          optionQuantity: 5,
         },
       ],
     },
     {
-      consumable_type: 'drinks',
-      details: [
-        {
-          category_name: 'Bottled Beer',
-          category_id: 'skAU54pDAvEbjQIbCKmM',
-          items: [
-            {
-              id: '8d760f99ca0a46438d061e7b4203df87',
-              title: 'Corona',
-              indicator: 'Alcoholic',
-              price: 175,
-              img_url:
-                'https://www.corona.com/content/corona-global/en/home/_jcr_content/contentPar/section/full-section-content/section_1/full-section-content/section/normal-section-content/grid/g31/image.img.png/prd-corona.png',
-              customizable: [
-                {
-                  optionId: 'skAU54pDAvEbjQIbCKmMOP1',
-                  optionTitle: '330ml',
-                  optionPrice: 175,
-                  optionQuantity: 5,
-                },
-                {
-                  optionId: 'skAU54pDAvEbjQIbCKmMOP2',
-                  optionTitle: '550ml',
-                  optionPrice: 325,
-                  optionQuantity: 1,
-                },
-              ],
-              quantity: 0,
-            },
-            {
-              id: '80c5f06f636d2a1b0df2f7d9af557f58',
-              title: 'Kingfisher Ultra',
-              indicator: 'Alcoholic',
-              price: 270,
-              img_url:
-                'https://cdn.i.haymarketmedia.asia/?n=campaign-india%2Fcontent%2Fultramax.jpg&h=570&w=855&q=100&v=20170226&c=1',
-              customizable: [],
-              quantity: 11,
-            },
-          ],
-        },
-        {
-          category_name: 'Whisky/Whiskey',
-          category_id: 'wzGG6N3bPbQm3vL4aBld',
-          items: [
-            {
-              id: '04f33bb5725d1015b9a521b71af927eb',
-              title: 'Jim Beam',
-              indicator: 'Alcoholic',
-              price: 789,
-              img_url: '',
-              customizable: [],
-              quantity: 1,
-            },
-            {
-              id: 'efcad93d8081293be94c9055561f2ca2',
-              title: 'Black Dog',
-              indicator: 'Alcoholic',
-              price: 344,
-              img_url:
-                'http://barzy.in/wp-content/uploads/2020/05/BLACK-DOG-CENTENARY-AGED-AND-RARE-BLACK-RESERVESCOTCH-WHISKY.jpeg',
-              customizable: [],
-              quantity: 1,
-            },
-            {
-              id: '51ac81a22536c40387c2de0e04dc84d7',
-              title: 'Black and white',
-              indicator: 'Alcoholic',
-              price: 475,
-              img_url: 'https://i0.wp.com/kinywaji.com/wp-content/uploads/2019/05/Black-and_White_whisky.jpg?ssl=1',
-              customizable: [],
-              quantity: 4,
-            },
-          ],
-        },
-        {
-          category_name: 'Cocktail',
-          category_id: 'Pykfdd93R7baX6mZ5HMk',
-          items: [
-            {
-              id: 'e7524ba089fb5ea609c986482d982211',
-              title: 'Liit',
-              indicator: 'Alcoholic',
-              price: 495,
-              img_url: '"https://www.mumbailive.com/images/news/cropped_151134822182.jpg?w=1368',
-              customizable: [],
-              quantity: 32,
-            },
-          ],
-        },
-      ],
+      price: 575,
+      category_name: 'Starter',
+      img_url:
+        'https://www.simplyrecipes.com/thmb/ZO7EpqTvX4-3oWZJ_bEoyPgcaQ4=/1600x1600/smart/filters:no_upscale()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2017__02__2017-02-27-ChickenTikkaMasala-16-d8f19c6207b849be8a63695c04a88ec2.jpg',
+      description: '',
+      title: 'Paneer Manchurian',
+      category_id: 'clYxQf15MIATJ1Jv78Zk',
+      id: 'fdc515448a014b1258e3dbdc2a487e87',
+      indicator: 'Veg',
+      quantity: 3,
+      customizable: [],
     },
   ],
 };

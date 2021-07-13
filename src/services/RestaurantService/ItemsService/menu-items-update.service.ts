@@ -13,6 +13,7 @@ export class ItemsUpdateService {
   async processNewItemIntoCurrentObject() {
     const newItem = this._menuItemToUpdate;
     delete newItem.type;
+    delete newItem.restaurantID;
     const currentMenu = this._menuData;
     const doesItemToUpdateExistInCurrentMenu = this.checkIfItemExistsInCurrentMenu();
     if (!doesItemToUpdateExistInCurrentMenu)
