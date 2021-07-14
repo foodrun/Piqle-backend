@@ -4,7 +4,7 @@ import { INewOrder, IOrder } from '../../../interfaces/order.interface';
 import { ICategorwiseBill } from '../../../interfaces/orderBill.interface';
 import { ITables } from '../../../interfaces/table.interface';
 import { OrderBillObjectGenerator } from '../../../utils/orderBillObjectGenerator';
-import { BillingService } from '../BillingService/billing';
+import { BillingService } from '../BillingService/orderItemsGenerator';
 import { SessionOperations } from '../SessionService/SessionOperations/session-ops.service';
 import { tableOperations } from '../TableService/TableOperations/table-operations.service';
 import { orderOperations } from './OrderOperations/order-ops.service';
