@@ -1,10 +1,10 @@
 import HttpException from '../../../exceptions/HttpException';
 import { IUser } from '../../../interfaces/common.interface';
-import { INewOrder, IOrder } from '../../../interfaces/order.interface';
-import { ICategorwiseBill } from '../../../interfaces/orderBill.interface';
+import { INewOrder } from '../../../interfaces/order.interface';
+// import { ICategorwiseBill } from '../../../interfaces/orderBill.interface';
 import { ITables } from '../../../interfaces/table.interface';
-import { OrderBillObjectGenerator } from '../../../utils/orderBillObjectGenerator';
-import { BillingService } from '../BillingService/orderItemsGenerator';
+// import { OrderBillObjectGenerator } from '../../../utils/orderBillObjectGenerator';
+// import { BillingService } from '../BillingService/orderItemsGenerator';
 import { SessionOperations } from '../SessionService/SessionOperations/session-ops.service';
 import { tableOperations } from '../TableService/TableOperations/table-operations.service';
 import { orderOperations } from './OrderOperations/order-ops.service';
@@ -14,13 +14,13 @@ interface IOrderService {
   isTableOccupiedAndHasSession(restaurantID: string, tableID: string): Promise<boolean>;
 }
 
-enum Bill {
-  TOTAL = 'total',
-  FOOD = 'food',
-  DRINKS = 'drinks',
-  FOOD_CATEGORIES = 'foodCategories',
-  DRINKS_CATEGORIES = 'drinksCategories',
-}
+// enum Bill {
+//   TOTAL = 'total',
+//   FOOD = 'food',
+//   DRINKS = 'drinks',
+//   FOOD_CATEGORIES = 'foodCategories',
+//   DRINKS_CATEGORIES = 'drinksCategories',
+// }
 
 export class OrderService implements IOrderService {
   constructor(private _orderDetails?: INewOrder) {}
@@ -29,7 +29,7 @@ export class OrderService implements IOrderService {
       this._orderDetails.restaurantID,
       (this._orderDetails.tableID as unknown) as string,
     );
-    if (!(await sessionOperations.getSession((this._orderDetails.sessionID as unknown) as string)))
+    if (!(await sessionOperations.getSessionExistenceStatus((this._orderDetails.sessionID as unknown) as string)))
       throw new HttpException(400, 'Invalid Session ID');
     if (await this.isTableOccupiedAndHasSession()) {
       // const billing = new BillingService(this._orderDetails);

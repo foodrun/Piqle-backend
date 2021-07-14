@@ -1,17 +1,20 @@
 import * as admin from 'firebase-admin';
 import { ORDERS, RESTAURANTS, SESSIONS } from '../../../../constants';
 import { dbConfig } from '../../../../database';
+import HttpException from '../../../../exceptions/HttpException';
+import { IUserSession } from '../../../../interfaces/common.interface';
 
 interface ISessionOperations {
   getTableSessionDetails(): null;
   getAllSessions();
   updateSessionMembers(sessionID: string, memberID: string, memberName: string): Promise<FirebaseFirestore.WriteResult>;
   updateSessionOrders(sessionID: string, orderID: string): Promise<FirebaseFirestore.WriteResult>;
-  getSession(sessionID: string): Promise<boolean>;
+  getSessionExistenceStatus(sessionID: string): Promise<boolean>;
+  getSession(sessionID: string): Promise<IUserSession>;
 }
 
 export class SessionOperations implements ISessionOperations {
-  constructor(private _restaurantID: string, private _tableID: string) {}
+  constructor(private _restaurantID: string, private _tableID?: string) {}
 
   getTableSessionDetails() {
     return null;
@@ -55,7 +58,7 @@ export class SessionOperations implements ISessionOperations {
     return unionRes;
   }
 
-  async getSession(sessionID: string): Promise<boolean> {
+  async getSessionExistenceStatus(sessionID: string): Promise<boolean> {
     const sessionDocRef = dbConfig()
       .collection(RESTAURANTS)
       .doc(this._restaurantID)
@@ -68,4 +71,16 @@ export class SessionOperations implements ISessionOperations {
       return true;
     }
   }
+
+  getSession = async (sessionID: string): Promise<IUserSession> => {
+    const session = await dbConfig()
+      .collection(RESTAURANTS)
+      .doc(this._restaurantID)
+      .collection(SESSIONS)
+      .doc(sessionID)
+      .get();
+
+    if (!session.exists) throw new HttpException(400, 'Session Does Not Exist');
+    return session.data() as IUserSession;
+  };
 }

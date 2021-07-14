@@ -19,3 +19,18 @@ export interface IOrderBill {
   orderID: string;
   orderStatus: string;
 }
+
+export interface IFinalBill {
+  sessionID: string;
+  gross_total: number;
+  gst_1: number;
+  gst_2: number;
+  other_charges: string | unknown | null;
+  net_total: number;
+  items: Array<IOrderBill>;
+}
+
+export interface IBillRequest {
+  restaurantID: string;
+  sessionID: string;
+}
