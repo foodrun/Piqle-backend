@@ -1,3 +1,5 @@
+import { IFinalBill } from './orderBill.interface';
+
 export interface IAddUser {
   email: string;
   restaurantID: string;
@@ -20,9 +22,10 @@ export interface IUserSession {
   members: [{ member_id: string; member_name: string }];
   start_timestamp: FirebaseFirestore.Timestamp;
   end_timestamp: FirebaseFirestore.Timestamp;
-  orders: string;
+  orders: Array<FirebaseFirestore.DocumentReference>;
   table_identifier: FirebaseFirestore.DocumentReference;
   table_number: number;
+  billDetails: IFinalBill | null;
 }
 
 export interface ISessionDetails {

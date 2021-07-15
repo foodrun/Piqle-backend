@@ -36,9 +36,14 @@ export interface IOrder {
 
 export interface INewOrder {
   restaurantID: string;
-  tableID: string;
-  sessionID: string;
+  tableID: FirebaseFirestore.DocumentReference;
+  sessionID: FirebaseFirestore.DocumentReference;
   order: Array<IOrderItem>;
+  end_timestamp: FirebaseFirestore.Timestamp;
+  start_timestamp: FirebaseFirestore.Timestamp;
+  memberID: string;
+  memberName: string;
+  orderStatus: string;
 }
 
 export interface IOrderItem {

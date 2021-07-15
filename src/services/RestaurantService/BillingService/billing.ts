@@ -1,101 +1,52 @@
-import * as _ from 'lodash';
-import { IFood, IOrder } from '../../../interfaces/order.interface';
-
-interface ICategorwiseBill {
-  [category: string]: number;
-}
-
-enum ConsumableType {
-  FOOD = 'food',
-  DRINKS = 'drinks',
-}
-
-enum Bill {
-  TOTAL = 'total',
-  FOOD = 'food',
-  DRINKS = 'drinks',
-  FOOD_CATEGORIES = 'foodCategories',
-  DRINKS_CATEGORIES = 'drinksCategories',
-}
+import HttpException from '../../../exceptions/HttpException';
+import { INewOrder } from '../../../interfaces/order.interface';
+import { IFinalBill, IOrderBill } from '../../../interfaces/orderBill.interface';
+import { SessionOperations } from '../SessionService/SessionOperations/session-ops.service';
+import { OrderItemsGenerator } from './orderItemsGenerator';
 
 export class BillingService {
-  constructor(private _orders: IOrder) {}
-  private _foodOrderBill = 0;
-  private _drinksOrderBill = 0;
-  private _totalOrderBill: number;
-  private _foodOrder: IFood[];
-  private _drinksOrder: IFood[];
-  private _categoryWiseFoodBill: ICategorwiseBill;
-  private _categoryWiseDrinksBill: ICategorwiseBill;
+  private _orderReferenceArray = [] as Array<FirebaseFirestore.DocumentReference>;
+  private _adHocMasterArrayBeforeFlattning = [] as Array<Array<IOrderBill>>;
+  private _adHocMasterArrayAfterFlattning = [] as Array<IOrderBill>;
+  private _bill = {} as IFinalBill;
+  private _sessionID: string;
 
-  itemsSetter(): void {
-    this._foodOrder = this._orders.order.filter(food => Boolean(food.consumable_type === ConsumableType.FOOD));
-    this._drinksOrder = this._orders.order.filter(drinks => Boolean(drinks.consumable_type === ConsumableType.DRINKS));
-  }
+  getOrderReferencesFromDB = async (restaurantID: string, sessionID: string) => {
+    this._sessionID = sessionID;
+    const sessionOperations = new SessionOperations(restaurantID);
+    const userSessionArray = await sessionOperations.getSession(sessionID);
+    this._orderReferenceArray = userSessionArray.orders;
+  };
 
-  calculateOrderTotal(): void {
-    this.calculateCategoryWiseBill(ConsumableType.FOOD);
-    this.calculateCategoryWiseBill(ConsumableType.DRINKS);
-  }
-
-  calculateCategoryWiseBill(consumable_type: string): void {
-    let orderDetails: IFood;
-    const OrderCategoryWiseBill: ICategorwiseBill = {};
-    const isConsumableTypeFood = consumable_type === ConsumableType.FOOD;
-    if (isConsumableTypeFood) {
-      orderDetails = this._foodOrder[0];
-    } else {
-      orderDetails = this._drinksOrder[0];
+  getIndivisualOrderBill = async () => {
+    for (const ref of this._orderReferenceArray) {
+      const orderDetails = ((await ref.get()).data() as unknown) as INewOrder;
+      if (!orderDetails) throw new HttpException(500, 'Orders for the sessions do not exist');
+      const orderItemsArray = OrderItemsGenerator(orderDetails, ref.id);
+      this._adHocMasterArrayBeforeFlattning.push(orderItemsArray);
     }
-    if (orderDetails && orderDetails) {
-      orderDetails.details.forEach(category => {
-        const categoryName = category.category_name;
-        if (!(categoryName in OrderCategoryWiseBill)) {
-          OrderCategoryWiseBill[categoryName] = 0;
-          category.items.forEach(item => {
-            if (item.customizable.length > 0) {
-              const customizationsWithQuantityGreaterThanZero = item.customizable.filter(
-                cusItems => cusItems.optionQuantity > 0 && cusItems.optionQuantity !== null,
-              );
-              customizationsWithQuantityGreaterThanZero.forEach(customization => {
-                if (customization.optionQuantity > 0) {
-                  const totalItemCost = customization.optionPrice * customization.optionQuantity;
-                  OrderCategoryWiseBill[categoryName] += totalItemCost;
-                }
-              });
-            } else {
-              if (item.quantity > 0) {
-                const totalItemCost = item.price * item.quantity;
-                OrderCategoryWiseBill[categoryName] += totalItemCost;
-              }
-            }
-          });
-        }
-      });
-    }
-    if (isConsumableTypeFood) {
-      let foodBill = 0;
-      this._categoryWiseFoodBill = OrderCategoryWiseBill;
-      _.map(this._categoryWiseFoodBill, v => {
-        foodBill += v;
-        this._foodOrderBill = foodBill;
-      });
-    } else {
-      let drinksBill = 0;
-      this._categoryWiseDrinksBill = OrderCategoryWiseBill;
-      _.map(this._categoryWiseDrinksBill, v => {
-        drinksBill += v;
-        this._drinksOrderBill = drinksBill;
-      });
-    }
-  }
 
-  Getter(bill: string): number | ICategorwiseBill {
-    if (bill === Bill.TOTAL) return (this._totalOrderBill = this._foodOrderBill + this._drinksOrderBill);
-    if (bill === Bill.FOOD) return this._foodOrderBill;
-    if (bill === Bill.DRINKS) return this._drinksOrderBill;
-    if (bill === Bill.FOOD_CATEGORIES) return this._categoryWiseFoodBill ? this._categoryWiseFoodBill : {};
-    if (bill === Bill.DRINKS_CATEGORIES) return this._categoryWiseDrinksBill ? this._categoryWiseDrinksBill : {};
-    throw new Error('Bill Does not Exist');
-  }
+    this._adHocMasterArrayAfterFlattning = this._adHocMasterArrayBeforeFlattning.flat();
+  };
+
+  generateFinalBill = () => {
+    let totalBill = 0;
+    this._adHocMasterArrayAfterFlattning.forEach(item => {
+      if (item.item_total && item.item_total !== null) {
+        totalBill += item.item_total;
+      }
+    });
+
+    this._bill['gross_total'] = totalBill;
+    this._bill['items'] = this._adHocMasterArrayAfterFlattning;
+    this._bill['sessionID'] = this._sessionID;
+    this._bill['gst_1'] = 0;
+    this._bill['gst_2'] = 0;
+    this._bill['net_total'] = totalBill;
+    this._bill['other_charges'] = 0;
+  };
+
+  getSessionTotalBill = (): IFinalBill => {
+    return this._bill;
+  };
 }
