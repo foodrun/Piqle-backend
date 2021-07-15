@@ -18,7 +18,7 @@ export const OrderItemsGenerator = (orderDetails: INewOrder, orderID: string): A
         itemGenerator['orderID'] = orderID;
         itemGenerator['orderStatus'] = orderDetails.orderStatus;
         itemGenerator['placed_by'] = orderDetails['memberID'];
-        itemGenerator['item_total'] = orderDetails.orderStatus === 'delivered' ? item.quantity * item.price : null;
+        itemGenerator['item_total'] = item.quantity * item.price;
         orderItemList.push(itemGenerator);
       } else {
         item.customizable.forEach(itemCustomization => {
@@ -27,10 +27,7 @@ export const OrderItemsGenerator = (orderDetails: INewOrder, orderID: string): A
             itemGenerator['item_name'] = itemCustomization.optionTitle;
             itemGenerator['item_price'] = itemCustomization.optionPrice;
             itemGenerator['item_quantity'] = itemCustomization.optionQuantity;
-            itemGenerator['item_total'] =
-              orderDetails.orderStatus === 'delivered'
-                ? itemCustomization.optionPrice * itemCustomization.optionQuantity
-                : null;
+            itemGenerator['item_total'] = itemCustomization.optionPrice * itemCustomization.optionQuantity;
             itemGenerator['orderID'] = orderID;
             itemGenerator['orderStatus'] = orderDetails.orderStatus;
             itemGenerator['placed_by'] = orderDetails.memberID;

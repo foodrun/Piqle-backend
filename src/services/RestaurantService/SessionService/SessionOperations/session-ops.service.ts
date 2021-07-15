@@ -3,6 +3,7 @@ import { ORDERS, RESTAURANTS, SESSIONS } from '../../../../constants';
 import { dbConfig } from '../../../../database';
 import HttpException from '../../../../exceptions/HttpException';
 import { IUserSession } from '../../../../interfaces/common.interface';
+import { IFinalBill } from '../../../../interfaces/orderBill.interface';
 
 interface ISessionOperations {
   getTableSessionDetails(): null;
@@ -24,16 +25,22 @@ export class SessionOperations implements ISessionOperations {
     return null;
   }
 
+  async updateSessionBill(sessionID: string, bill: IFinalBill): Promise<boolean> {
+    await dbConfig()
+      .collection(RESTAURANTS)
+      .doc(this._restaurantID)
+      .collection(SESSIONS)
+      .doc(sessionID)
+      .update({ billDetails: bill });
+    return true;
+  }
+
   async updateSessionMembers(
     sessionID: string,
     memberID: string,
     memberName: string,
   ): Promise<FirebaseFirestore.WriteResult> {
-    const sessionRef = await dbConfig()
-      .collection(RESTAURANTS)
-      .doc(this._restaurantID)
-      .collection(SESSIONS)
-      .doc(sessionID);
+    const sessionRef = dbConfig().collection(RESTAURANTS).doc(this._restaurantID).collection(SESSIONS).doc(sessionID);
 
     const unionRes = await sessionRef.update({
       members: admin.firestore.FieldValue.arrayUnion({ member_id: memberID, member_name: memberName }),

@@ -4,7 +4,7 @@ import { IFinalBill, IOrderBill } from '../../../interfaces/orderBill.interface'
 import { SessionOperations } from '../SessionService/SessionOperations/session-ops.service';
 import { OrderItemsGenerator } from './orderItemsGenerator';
 
-class BillingService {
+export class BillingService {
   private _orderReferenceArray = [] as Array<FirebaseFirestore.DocumentReference>;
   private _adHocMasterArrayBeforeFlattning = [] as Array<Array<IOrderBill>>;
   private _adHocMasterArrayAfterFlattning = [] as Array<IOrderBill>;
@@ -46,9 +46,7 @@ class BillingService {
     this._bill['other_charges'] = 0;
   };
 
-  getSessionTotalBill = () => {
+  getSessionTotalBill = (): IFinalBill => {
     return this._bill;
   };
 }
-
-export const billingService = new BillingService();

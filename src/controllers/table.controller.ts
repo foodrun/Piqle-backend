@@ -22,9 +22,10 @@ class TableController {
       if (tableOTPVerificationStatus.success === true) {
         res.status(200).json(tableOTPVerificationStatus);
       } else {
-        res.status(400).send(tableOTPVerificationStatus);
+        res.status(400).json(tableOTPVerificationStatus);
       }
     } catch (_e) {
+      console.log(_e, 'error');
       next(_e);
     }
   };
