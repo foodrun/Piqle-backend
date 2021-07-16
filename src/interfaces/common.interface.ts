@@ -26,6 +26,7 @@ export interface IUserSession {
   table_identifier: FirebaseFirestore.DocumentReference;
   table_number: number;
   billDetails: IFinalBill | null;
+  status: string | null;
 }
 
 export interface ISessionDetails {
