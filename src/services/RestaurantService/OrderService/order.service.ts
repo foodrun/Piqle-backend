@@ -1,3 +1,4 @@
+import { SessionBillStatus } from '../../../enums/sessionStatus.enum';
 import HttpException from '../../../exceptions/HttpException';
 import { IUser } from '../../../interfaces/common.interface';
 import { INewOrder } from '../../../interfaces/order.interface';
@@ -29,9 +30,9 @@ export class OrderService implements IOrderService {
       this._orderDetails.restaurantID,
       (this._orderDetails.tableID as unknown) as string,
     );
-    if (!(await sessionOperations.getSessionExistenceStatus((this._orderDetails.sessionID as unknown) as string)))
-      throw new HttpException(400, 'Invalid Session ID');
+    const session = await sessionOperations.getSession((this._orderDetails.sessionID as unknown) as string);
     if (await this.isTableOccupiedAndHasSession()) {
+      if (session.status === SessionBillStatus.GENERATED) throw new HttpException(400, 'Bill Generated');
       // const billing = new BillingService(this._orderDetails);
       // billing.itemsSetter();
       // billing.calculateOrderTotal();

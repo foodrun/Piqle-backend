@@ -4,11 +4,10 @@
 //Update Order
 
 import * as admin from 'firebase-admin';
-import { ORDERS, RESTAURANTS, SESSIONS, TABLES } from '../../../../constants';
+import { ORDERS, PLACED, RESTAURANTS, SESSIONS, TABLES } from '../../../../constants';
 import { dbConfig } from '../../../../database';
-import { OrderStatus } from '../../../../enums/orderStatus.enum';
 import { IUser } from '../../../../interfaces/common.interface';
-import { INewOrder, IOrder } from '../../../../interfaces/order.interface';
+import { INewOrder } from '../../../../interfaces/order.interface';
 import { IOrderBillDetails } from '../../../../interfaces/orderBill.interface';
 
 interface IOrderClass {
@@ -33,7 +32,7 @@ class OrderOperations implements IOrderClass {
       .doc(orderDetails.restaurantID)
       .collection(ORDERS)
       .add({
-        orderStatus: OrderStatus.PLACED,
+        orderStatus: PLACED,
         ...order,
         ...userDetails,
         // orderBillDetails,

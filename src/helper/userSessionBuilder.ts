@@ -18,6 +18,7 @@ export const UserSessionBuilder = (
     table_identifier: dbConfig().doc(`/${RESTAURANTS}/${restaurantID}/${TABLES}/${table_identifier}`),
     table_number: table_number,
     billDetails: null,
+    status: null,
   };
 
   return session;

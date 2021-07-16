@@ -20,6 +20,12 @@ export const GROUPS = [ADMINS, WAITERS, CHEFS];
 export const FOOD_DATA = 'food_data';
 export const DRINKS_DATA = 'drinks_data';
 
+export const PLACED = 'placed';
+export const INPREPARATION = 'inpreparation';
+export const DELIVERED = 'delivered';
+export const CANCELLED = 'cancelled';
+export const DECLINED = 'declined';
+
 export const AWSCognito = new AWS.CognitoIdentityServiceProvider({
   region: config.AUTH.region,
   credentials: { secretAccessKey: config.AUTH.secret_key, accessKeyId: config.AUTH.access_key },

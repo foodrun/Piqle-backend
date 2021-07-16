@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import { ORDERS, RESTAURANTS, SESSIONS } from '../../../../constants';
 import { dbConfig } from '../../../../database';
+import { SessionBillStatus } from '../../../../enums/sessionStatus.enum';
 import HttpException from '../../../../exceptions/HttpException';
 import { IUserSession } from '../../../../interfaces/common.interface';
 import { IFinalBill } from '../../../../interfaces/orderBill.interface';
@@ -31,7 +32,7 @@ export class SessionOperations implements ISessionOperations {
       .doc(this._restaurantID)
       .collection(SESSIONS)
       .doc(sessionID)
-      .update({ billDetails: bill });
+      .update({ billDetails: bill, status: SessionBillStatus.GENERATED });
     return true;
   }
 
@@ -87,7 +88,7 @@ export class SessionOperations implements ISessionOperations {
       .doc(sessionID)
       .get();
 
-    if (!session.exists) throw new HttpException(400, 'Session Does Not Exist');
+    if (!session.exists) throw new HttpException(400, 'Invalid Session ID');
     return session.data() as IUserSession;
   };
 }
