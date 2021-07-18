@@ -37,6 +37,18 @@ class RestaurantAdminController {
       next(error);
     }
   };
+
+  public updateTableOccupationStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      console.log(req.body);
+      const { restaurantID, tableID, status } = req.body;
+      restaurantAdmin.changeTableOccupationStatus(restaurantID, tableID, status);
+      res.status(200).json();
+    } catch (_e) {
+      const error: Error = _e;
+      next(error);
+    }
+  };
 }
 
 export const restaurantAdminController = new RestaurantAdminController();

@@ -21,4 +21,11 @@ restaurantAdminRouter.put(
   restaurantAdminController.updateRestaurantMenuItem,
 );
 
+restaurantAdminRouter.put(
+  '/restaurant-management/change-table-status',
+  // GAuth,
+  // IsRestaurantAdminGAuth,
+  restaurantAdminController.updateTableOccupationStatus,
+);
+
 export default restaurantAdminRouter;

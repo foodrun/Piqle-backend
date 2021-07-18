@@ -2,6 +2,7 @@ import HttpException from '../../exceptions/HttpException';
 import * as admin from 'firebase-admin';
 import axios from 'axios';
 import { config as conf } from '../../config/app.config';
+import { tableOperations } from '../RestaurantService/TableService/TableOperations/table-operations.service';
 
 class RestaurantAdminService {
   public async convertStaffToAdmin(uid: string, restaurantID: string): Promise<boolean> {
@@ -36,8 +37,6 @@ class RestaurantAdminService {
       password: password,
       returnSecureToken: true,
     });
-    console.log(restaurantID, 'id');
-    console.log(data, 'data');
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${conf.AUTH.googleAuthAPIKey}`;
 
     const config = {
@@ -60,6 +59,13 @@ class RestaurantAdminService {
     } catch (error) {
       return false;
     }
+  }
+
+  public async changeTableOccupationStatus(restaurantID: string, tableID: string, status: boolean): Promise<boolean> {
+    if (!tableID || !restaurantID) throw new HttpException(400, 'Invalid Input');
+    await tableOperations.getTable(restaurantID, tableID);
+    const updateTable = await tableOperations.updateTable(restaurantID, tableID, 'table.tableOccupied', status, false);
+    if (updateTable) return true;
   }
 }
 

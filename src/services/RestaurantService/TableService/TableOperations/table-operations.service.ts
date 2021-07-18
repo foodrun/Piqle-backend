@@ -16,6 +16,7 @@ interface ITableOperations {
 class TableOperations implements ITableOperations {
   private _tableInformation: ITables;
   async updateTable<T>(restaurantID: string, tableID: string, key: string, value: T, reference: boolean) {
+    console.log(reference, '3');
     const res = await dbConfig()
       .collection(RESTAURANTS)
       .doc(restaurantID)
