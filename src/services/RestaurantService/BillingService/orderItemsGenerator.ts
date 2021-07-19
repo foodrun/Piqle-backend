@@ -26,7 +26,7 @@ export const OrderItemsGenerator = (orderDetails: INewOrder, orderID: string): A
         item.customizable.forEach(itemCustomization => {
           if (itemCustomization.optionQuantity > 0) {
             const itemGenerator = {} as IOrderBill;
-            itemGenerator['item_name'] = itemCustomization.optionTitle;
+            itemGenerator['item_name'] = item.title + ' ' + itemCustomization.optionTitle;
             itemGenerator['item_price'] = itemCustomization.optionPrice;
             itemGenerator['item_quantity'] = itemCustomization.optionQuantity;
             itemGenerator['item_total'] =

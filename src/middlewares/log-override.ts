@@ -35,7 +35,7 @@ export const LogOverRide = (req: IUserRequest, res: Response, next: NextFunction
       environment: process.env.NODE_ENV,
     };
     // logger.log('info', 'Metalogs', metaLog);
-    console.log(JSON.parse(JSON.stringify(metaLog)));
+    console.log(JSON.stringify(metaLog));
     oldSend.apply(this, arguments);
   } as Send;
   Userlogger.ResetLogsMetaKey();
