@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { ORDERS, RESTAURANTS, SESSIONS } from '../../../../constants';
+import { ORDERS, RESTAURANTS, SESSIONS, USERS } from '../../../../constants';
 import { dbConfig } from '../../../../database';
 import { SessionBillStatus } from '../../../../enums/sessionStatus.enum';
 import HttpException from '../../../../exceptions/HttpException';
@@ -44,7 +44,7 @@ export class SessionOperations implements ISessionOperations {
     const sessionRef = dbConfig().collection(RESTAURANTS).doc(this._restaurantID).collection(SESSIONS).doc(sessionID);
 
     const unionRes = await sessionRef.update({
-      members: admin.firestore.FieldValue.arrayUnion({ member_id: memberID, member_name: memberName }),
+      members: admin.firestore.FieldValue.arrayUnion(dbConfig().doc(`/${USERS}/${memberID}`)),
     });
 
     return unionRes;

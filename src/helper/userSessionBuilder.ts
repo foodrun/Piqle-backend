@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { RESTAURANTS, TABLES } from '../constants';
+import { RESTAURANTS, TABLES, USERS } from '../constants';
 import { dbConfig } from '../database';
 import { IUserSession } from '../interfaces/common.interface';
 
@@ -11,7 +11,8 @@ export const UserSessionBuilder = (
   restaurantID: string,
 ) => {
   const session = <IUserSession>{
-    members: [{ member_id: member_id, member_name: member_name }],
+    // members: [{ member_id: member_id, member_name: member_name }],
+    members: [dbConfig().doc(`/${USERS}/${member_id}`)],
     start_timestamp: admin.firestore.Timestamp.fromDate(new Date()),
     end_timestamp: null,
     orders: null,

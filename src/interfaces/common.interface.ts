@@ -19,7 +19,7 @@ export interface ITableActivateBody {
 }
 
 export interface IUserSession {
-  members: [{ member_id: string; member_name: string }];
+  members: Array<FirebaseFirestore.DocumentReference>;
   start_timestamp: FirebaseFirestore.Timestamp;
   end_timestamp: FirebaseFirestore.Timestamp;
   orders: Array<FirebaseFirestore.DocumentReference>;
