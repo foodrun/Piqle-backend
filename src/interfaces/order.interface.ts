@@ -1,21 +1,28 @@
-interface ICustomizations {
+export interface ICustomizations {
   optionTitle: string;
   optionPrice: number;
-  optionQuantity: number;
-  optionID: string;
+  optionQuantity?: number;
+  optionId: string;
 }
 
-interface IItems {
+export interface IItem {
   indicator: string;
   title: string;
   price: number;
   img_url: string;
-  id: string;
-  quantity: string;
-  customizable: Array<ICustomizations>;
+  food_id?: string;
+  id?: string;
+  quantity: number;
+  customizable?: Array<ICustomizations>;
 }
 
-interface IFood {
+export interface IItems {
+  category_name: string;
+  category_id: string;
+  items: Array<IItem>;
+}
+
+export interface IFood {
   consumable_type: string;
   details: Array<IItems>;
 }
@@ -25,4 +32,29 @@ export interface IOrder {
   tableID: string;
   sessionID: string;
   order: Array<IFood>;
+}
+
+export interface INewOrder {
+  restaurantID: string;
+  tableID: FirebaseFirestore.DocumentReference;
+  sessionID: FirebaseFirestore.DocumentReference;
+  order: Array<IOrderItem>;
+  end_timestamp: FirebaseFirestore.Timestamp;
+  start_timestamp: FirebaseFirestore.Timestamp;
+  memberID: string;
+  memberName: string;
+  orderStatus: string;
+}
+
+export interface IOrderItem {
+  category_id: string;
+  category_name: string;
+  description: string;
+  id: string;
+  img_url: string;
+  indicator: string;
+  price: number;
+  title: string;
+  quantity: number;
+  customizable: Array<ICustomizations>;
 }

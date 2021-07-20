@@ -7,7 +7,7 @@ import { IAddUser } from '../interfaces/common.interface';
 import { logger } from '../utils/logger';
 
 export class AddNewUser {
-  constructor(private user: IAddUser) {}
+  constructor(private user?: IAddUser) {}
   public async addNewUser(): Promise<boolean> {
     const { username, password, restaurantID, email, phoneNumber } = this.user;
     const userCreationResponse = <AdminCreateUserResponse>(
@@ -17,8 +17,8 @@ export class AddNewUser {
     );
     logger.log('info', userCreationResponse);
     if (userCreationResponse.User.UserStatus === UserStatus.CHANGE_PASSWORD)
-      await this.addNewUserToGroup(this.user.group);
-    return true;
+      // await this.addNewUserToGroup(this.user.group);
+      return true;
   }
 
   public async addNewUserToGroup(group: string): Promise<unknown> {

@@ -22,9 +22,10 @@ class TableController {
       if (tableOTPVerificationStatus.success === true) {
         res.status(200).json(tableOTPVerificationStatus);
       } else {
-        res.status(400).send(tableOTPVerificationStatus);
+        res.status(400).json(tableOTPVerificationStatus);
       }
     } catch (_e) {
+      console.log(_e, 'error');
       next(_e);
     }
   };
@@ -32,11 +33,12 @@ class TableController {
   public generateQRAndUpdateDB = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { restaurantID, tableID } = <{ restaurantID: string; tableID: string }>req.body;
-      const qrURL = `${config.QR_SERVICE.url}?size=${config.QR_SERVICE.size_height}x${config.QR_SERVICE.size_width}&data=${config.QR_SERVICE.food_run_url}/restaurant/${restaurantID}/table/${tableID}`;
+      const qrURL = `${config.QR_SERVICE.url}?size=${config.QR_SERVICE.size_height}x${config.QR_SERVICE.size_width}&data=${config.QR_SERVICE.food_run_url}/restaurantId/${restaurantID}/tableId/${tableID}`;
       const QRService = new QRCodeGenerator(restaurantID, tableID, qrURL);
       await QRService.generateAndUploadTableQR();
       res.status(204).send();
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

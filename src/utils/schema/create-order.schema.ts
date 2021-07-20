@@ -7,29 +7,21 @@ export const orderSchema = Joi.object().keys({
   order: Joi.array()
     .items(
       Joi.object().keys({
-        consumable_type: Joi.string().valid('food', 'drinks').required(),
-        details: Joi.array().items(
+        category_name: Joi.string().required(),
+        category_id: Joi.string().required(),
+        description: Joi.string().allow('').required(),
+        id: Joi.string().required(),
+        img_url: Joi.string().required(),
+        indicator: Joi.string().required(),
+        price: Joi.number().required(),
+        title: Joi.string().required(),
+        quantity: Joi.number().required(),
+        customizable: Joi.array().items(
           Joi.object().keys({
-            category_name: Joi.string().required(),
-            category_id: Joi.string().alphanum().min(20).max(20).required(),
-            items: Joi.array().items(
-              Joi.object().keys({
-                indicator: Joi.string().required(),
-                title: Joi.string().required(),
-                price: Joi.number().required(),
-                img_url: Joi.string().required(),
-                id: Joi.string().required(),
-                quantity: Joi.number().required(),
-                customizable: Joi.array().items(
-                  Joi.object().keys({
-                    optionTitle: Joi.string().required(),
-                    optionPrice: Joi.number().required(),
-                    optionQuantity: Joi.number().required(),
-                    optionId: Joi.string().required(),
-                  }),
-                ),
-              }),
-            ),
+            optionId: Joi.string().required(),
+            optionPrice: Joi.number().required(),
+            optionTitle: Joi.string().required(),
+            optionQuantity: Joi.number().required(),
           }),
         ),
       }),
