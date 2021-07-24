@@ -11,7 +11,7 @@ export const orderSchema = Joi.object().keys({
         category_id: Joi.string().required(),
         description: Joi.string().allow('').required(),
         id: Joi.string().required(),
-        img_url: Joi.string().required(),
+        img_url: Joi.string().allow('').required(),
         indicator: Joi.string().required(),
         price: Joi.number().required(),
         title: Joi.string().required(),
