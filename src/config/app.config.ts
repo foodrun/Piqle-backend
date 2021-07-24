@@ -27,12 +27,15 @@ const {
   SIZE_WIDTH,
   SIZE_HEIGHT,
   FOOD_RUN_URL,
+  AUTH,
+  GOOGLE_AUTH_API_KEY,
 } = process.env;
 
 export const config = {
   application: {
     PORT: PORT,
     environment: NODE_ENV,
+    superAdminAuthKey: AUTH,
   },
   DB: {
     type: FIRESTORE_TYPE,
@@ -57,6 +60,7 @@ export const config = {
     cognitoUserPoolId: cognitoUserPoolId,
     tokenUse: tokenUse,
     tokenExpiration: tokenExpiration,
+    googleAuthAPIKey: GOOGLE_AUTH_API_KEY,
   },
   QR_SERVICE: {
     url: QR_URL,

@@ -8,6 +8,7 @@ export const RESTAURANTS = 'restaurants';
 export const TABLES = 'tables';
 export const SESSIONS = 'sessions';
 export const ORDERS = 'orders';
+export const USERS = 'users';
 
 export const NOT_REQUESTED = 'Table information not requested';
 export const FOOD_RUN_ADMIN = 'foodRunAdmins';
@@ -16,6 +17,15 @@ export const WAITERS = 'waiters';
 export const CHEFS = 'chefs';
 
 export const GROUPS = [ADMINS, WAITERS, CHEFS];
+
+export const FOOD_DATA = 'food_data';
+export const DRINKS_DATA = 'drinks_data';
+
+export const PLACED = 'placed';
+export const INPREPARATION = 'inpreparation';
+export const DELIVERED = 'delivered';
+export const CANCELLED = 'cancelled';
+export const DECLINED = 'declined';
 
 export const AWSCognito = new AWS.CognitoIdentityServiceProvider({
   region: config.AUTH.region,

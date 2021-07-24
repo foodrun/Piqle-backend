@@ -1,10 +1,12 @@
+import { IFinalBill } from './orderBill.interface';
+
 export interface IAddUser {
-  username: string;
   email: string;
-  phoneNumber: string;
-  group: string;
   restaurantID: string;
   password: string;
+  username?: string;
+  phoneNumber?: string;
+  userName: string;
 }
 
 export interface ITableActivateBody {
@@ -17,12 +19,14 @@ export interface ITableActivateBody {
 }
 
 export interface IUserSession {
-  members: [{ member_id: string; member_name: string }];
+  members: Array<FirebaseFirestore.DocumentReference>;
   start_timestamp: FirebaseFirestore.Timestamp;
   end_timestamp: FirebaseFirestore.Timestamp;
-  orders: string;
+  orders: Array<FirebaseFirestore.DocumentReference>;
   table_identifier: FirebaseFirestore.DocumentReference;
   table_number: number;
+  billDetails: IFinalBill | null;
+  status: string | null;
 }
 
 export interface ISessionDetails {

@@ -16,7 +16,7 @@ jobs:
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
           aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
           aws-region: AWS_REGION_ENV_VAR_NAME
-          from: s3://oota-node-backend-config/development/.env
+          from: s3://piqle-backend-config/development/.env
           to: '.'
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
@@ -25,7 +25,7 @@ jobs:
           create-repo: false
           dockerfile: Dockerfile.develop
           region: AWS_REGION_ENV_VAR_NAME
-          repo: foodrun-node-api
+          repo: piqle-development
           skip-when-tags-exist: false
           tag: "${CIRCLE_SHA1}"
   build_testing_api_server:
@@ -40,7 +40,7 @@ jobs:
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
           aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
           aws-region: AWS_REGION_ENV_VAR_NAME
-          from: s3://oota-node-backend-config/testing/.env
+          from: s3://piqle-backend-config/testing/.env
           to: '.'
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
@@ -49,7 +49,7 @@ jobs:
           create-repo: false
           dockerfile: Dockerfile.testing
           region: AWS_REGION_ENV_VAR_NAME
-          repo: foodrun-node-api-testing
+          repo: piqle-staging
           skip-when-tags-exist: false
           tag: "${CIRCLE_SHA1}"
   build_production_api_server:
@@ -64,7 +64,7 @@ jobs:
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
           aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
           aws-region: AWS_REGION_ENV_VAR_NAME
-          from: s3://oota-node-backend-config/production/.env
+          from: s3://piqle-backend-config/production/.env
           to: '.'
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
@@ -73,7 +73,7 @@ jobs:
           create-repo: false
           dockerfile: Dockerfile
           region: AWS_REGION_ENV_VAR_NAME
-          repo: foodrun-node-api-production
+          repo: piqle-production
           skip-when-tags-exist: false
           tag: "${CIRCLE_SHA1}"
 workflows:
@@ -85,55 +85,55 @@ workflows:
             branches:
               only:
                 - develop
-      - aws-ecs/deploy-service-update:
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          aws-region: AWS_REGION_ENV_VAR_NAME
-          cluster-name: "food-runner-ecs-node"
-          container-image-name-updates: "container=food-run-container,tag=${CIRCLE_SHA1}"
-          family: "food-run-task-definition"
-          service-name: "foodrun-ecs-dev"
-          requires:
-            - build_development_api_server
-          filters:
-            branches:
-              only:
-                - develop
+      # - aws-ecs/deploy-service-update:
+      #     aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+      #     aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+      #     aws-region: AWS_REGION_ENV_VAR_NAME
+      #     cluster-name: "food-runner-ecs-node"
+      #     container-image-name-updates: "container=food-run-container,tag=${CIRCLE_SHA1}"
+      #     family: "food-run-task-definition"
+      #     service-name: "foodrun-ecs-dev"
+      #     requires:
+      #       - build_development_api_server
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
       - build_testing_api_server:
           filters:
             branches:
               only:
                 - testing
-      - aws-ecs/deploy-service-update:
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          aws-region: AWS_REGION_ENV_VAR_NAME
-          cluster-name: "food-runner-ecs-node"
-          container-image-name-updates: "container=foodrun-container-testing,tag=${CIRCLE_SHA1}"
-          family: "food-run-task-definition-testing"
-          service-name: "foodrun-testing-service"
-          requires:
-            - build_testing_api_server
-          filters:
-            branches:
-              only:
-                - testing
+      # - aws-ecs/deploy-service-update:
+      #     aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+      #     aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+      #     aws-region: AWS_REGION_ENV_VAR_NAME
+      #     cluster-name: "food-runner-ecs-node"
+      #     container-image-name-updates: "container=foodrun-container-testing,tag=${CIRCLE_SHA1}"
+      #     family: "food-run-task-definition-testing"
+      #     service-name: "foodrun-testing-service"
+      #     requires:
+      #       - build_testing_api_server
+      #     filters:
+      #       branches:
+      #         only:
+      #           - testing
       - build_production_api_server:
           filters:
             branches:
               only:
                 - master
-      - aws-ecs/deploy-service-update:
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          aws-region: AWS_REGION_ENV_VAR_NAME
-          cluster-name: "food-runner-ecs-prod"
-          container-image-name-updates: "container=foodrun-container-production,tag=${CIRCLE_SHA1}"
-          family: "foodrun-task-definition-production"
-          service-name: "foodrun-prod-service"
-          requires:
-            - build_production_api_server
-          filters:
-            branches:
-              only:
-                - master
+      # - aws-ecs/deploy-service-update:
+      #     aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+      #     aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+      #     aws-region: AWS_REGION_ENV_VAR_NAME
+      #     cluster-name: "food-runner-ecs-prod"
+      #     container-image-name-updates: "container=foodrun-container-production,tag=${CIRCLE_SHA1}"
+      #     family: "foodrun-task-definition-production"
+      #     service-name: "foodrun-prod-service"
+      #     requires:
+      #       - build_production_api_server
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master

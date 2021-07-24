@@ -28,7 +28,10 @@ export const LogOverRide = (req: IUserRequest, res: Response, next: NextFunction
               }
             : userDetails,
       },
-      res: { responseSent: responseSent ? JSON.parse(responseSent) : 'No Data Defined in Response', responseStatus },
+      res: {
+        responseSent: responseSent ? JSON.parse(JSON.stringify(responseSent)) : 'No Data Defined in Response',
+        responseStatus,
+      },
       environment: process.env.NODE_ENV,
     };
     // logger.log('info', 'Metalogs', metaLog);
