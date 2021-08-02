@@ -6,7 +6,7 @@ export const UpdateMenuItemSchema = Joi.object().keys({
   availibility: Joi.boolean().required(),
   indicator: Joi.string().required(),
   category_name: Joi.string().required(),
-  img_url: Joi.string().required(),
+  img_url: Joi.string().allow('').required(),
   description: Joi.string().allow('').required(),
   title: Joi.string().required(),
   category_id: Joi.string().alphanum().min(20).max(20).required(),
