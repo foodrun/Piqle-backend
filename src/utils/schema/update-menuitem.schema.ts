@@ -9,7 +9,7 @@ export const UpdateMenuItemSchema = Joi.object().keys({
   img_url: Joi.string().allow('').required(),
   description: Joi.string().allow('').required(),
   title: Joi.string().required(),
-  category_id: Joi.string().alphanum().min(20).max(20).required(),
+  category_id: Joi.string().alphanum().min(20).max(40).required(),
   id: Joi.string().required(),
   restaurantID: Joi.string().alphanum().min(20).max(20).required(),
   customizable: Joi.array()
