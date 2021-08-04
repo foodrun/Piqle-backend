@@ -1,6 +1,9 @@
+import { RESTAURANTS } from '../../../constants';
+import { dbConfig } from '../../../database';
 import HttpException from '../../../exceptions/HttpException';
 import { INewOrder } from '../../../interfaces/order.interface';
 import { IFinalBill, IOrderBill } from '../../../interfaces/orderBill.interface';
+import { IRestaurantInformation } from '../../../interfaces/restaurant-information.interface';
 import { SessionOperations } from '../SessionService/SessionOperations/session-ops.service';
 import { OrderItemsGenerator } from './orderItemsGenerator';
 
@@ -29,7 +32,7 @@ export class BillingService {
     this._adHocMasterArrayAfterFlattning = this._adHocMasterArrayBeforeFlattning.flat();
   };
 
-  generateFinalBill = () => {
+  generateFinalBill = async (restaurantID: string) => {
     let totalBill = 0;
     this._adHocMasterArrayAfterFlattning.forEach(item => {
       if (item.item_total && item.item_total !== null) {
@@ -37,13 +40,32 @@ export class BillingService {
       }
     });
 
+    const restaurantBillingInformation = <IRestaurantInformation>(
+      (await dbConfig().collection(RESTAURANTS).doc(restaurantID).get()).data()
+    );
+
+    let { gst_1, gst_2, other_charges } = restaurantBillingInformation;
+
+    if (!gst_1 || !gst_2) {
+      gst_1 = 0;
+      gst_2 = 0;
+    }
+
+    if (!other_charges) {
+      other_charges = 0;
+    }
+
+    const totalGstTax = gst_1 + gst_2;
+    const totalInclusiveOfTax = (totalGstTax / 100) * totalBill + totalBill;
+    const totalInclusiveOfTaxAndOtherCharges = totalInclusiveOfTax + other_charges;
+
     this._bill['gross_total'] = totalBill;
     this._bill['items'] = this._adHocMasterArrayAfterFlattning;
     this._bill['sessionID'] = this._sessionID;
-    this._bill['gst_1'] = 0;
-    this._bill['gst_2'] = 0;
-    this._bill['net_total'] = totalBill;
-    this._bill['other_charges'] = 0;
+    this._bill['gst_1'] = gst_1;
+    this._bill['gst_2'] = gst_2;
+    this._bill['net_total'] = totalInclusiveOfTaxAndOtherCharges;
+    this._bill['other_charges'] = other_charges;
   };
 
   getSessionTotalBill = (): IFinalBill => {
