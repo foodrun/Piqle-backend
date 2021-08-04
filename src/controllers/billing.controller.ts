@@ -15,7 +15,6 @@ class BillingController {
       await billingService.getIndivisualOrderBill();
       await billingService.generateFinalBill(restaurantID);
       const bill = billingService.getSessionTotalBill();
-      console.log(bill, 'bill');
       const sessionOperations = new SessionOperations(restaurantID);
       sessionOperations.updateSessionBill(sessionID, bill);
       res.status(201).json();
