@@ -12,12 +12,6 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-      - aws-s3/copy:
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          aws-region: AWS_REGION_ENV_VAR_NAME
-          from: s3://piqle-backend-config/development/.env
-          to: '.'
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
@@ -36,12 +30,6 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-      - aws-s3/copy:
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          aws-region: AWS_REGION_ENV_VAR_NAME
-          from: s3://piqle-backend-config/testing/.env
-          to: '.'
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
@@ -60,12 +48,6 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: false
-      - aws-s3/copy:
-          aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-          aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-          aws-region: AWS_REGION_ENV_VAR_NAME
-          from: s3://piqle-backend-config/production/.env
-          to: '.'
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
           aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME

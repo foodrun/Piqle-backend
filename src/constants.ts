@@ -27,14 +27,16 @@ export const DELIVERED = 'delivered';
 export const CANCELLED = 'cancelled';
 export const DECLINED = 'declined';
 
-export const AWSCognito = new AWS.CognitoIdentityServiceProvider({
-  region: config.AUTH.region,
-  credentials: { secretAccessKey: config.AUTH.secret_key, accessKeyId: config.AUTH.access_key },
-});
+const env = process.env.NODE_ENV;
 
-export const AWSS3 = new AWS.S3({
-  region: config.AUTH.region,
-  credentials: { secretAccessKey: config.AUTH.secret_key, accessKeyId: config.AUTH.access_key },
-});
+const AWSRegion = { region: config.AUTH.region };
+
+if (env === 'local') {
+  AWS.config.accessKeyId = config.AUTH.access_key;
+  AWS.config.secretAccessKey = config.AUTH.secret_key;
+}
+
+export const AWSSECRETAMANAGER = new AWS.SecretsManager(AWSRegion);
+export const AWSCognito = new AWS.CognitoIdentityServiceProvider(AWSRegion);
 
 export const BUCKET_NAME = 'foodrun-restaurants-data';
